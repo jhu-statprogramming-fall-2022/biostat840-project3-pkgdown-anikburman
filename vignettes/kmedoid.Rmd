@@ -1,0 +1,112 @@
+---
+title: "K-medoids Distance-Based clustering"
+author: "Weksi Budiaji"
+date: "`r Sys.Date()`"
+output: html_vignette
+vignette: >
+  %\VignetteIndexEntry{K-medoids Distance-Based clustering}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 1. Introduction
+
+The **kmed** package was designed to analyse k-medoids based clustering; the features include:
+
+- distance computation (numerical, binary, categorical, and mixed variables)
+- k-medoids algorithms
+- bootstrap evaluation and visualization
+
+
+## 2. Distance Computation
+
+### A. Numerical variables
+
+There are four distance options, i.e. manhattan weighted by rank (`mrw`), squared euclidean weighted by rank (`ser`) and variance (`sev`), and squared euclidean unweighted (`se`). The `distNumeric` in the `method` provides its desired distance method.
+```{r}
+library(kmed)
+num <- as.matrix(iris[,1:4])
+mrwdist <- distNumeric(num, num, method = "mrw")
+mrwdist[1:6,1:6]
+```
+
+### B. Binary and Categorical variables
+
+Two options of distances are available for binary or categorical variables, namely simple matching (`matching`) and coocurrence (`coocurrence`) distance.
+```{r}
+set.seed(1)
+a <- matrix(sample(1:2, 7*3, replace = TRUE), 7, 3)
+matching(a, a)
+coocurance(a)
+```
+
+### C. Mixed variables
+
+There are five distances for mixed variables data, i.e gower (`gower`), wishart (`wishart`), podani (`podani`), huang (`huang`) and harikumar-pv (`harikumar`).
+```{r}
+a1 <- matrix(sample(1:3, 7*3, replace = TRUE), 7, 3)
+mixdata <- cbind(iris[1:7,1:3], a, a1)
+colnames(mixdata) <- c(paste(c("num"), 1:3, sep = ""), paste(c("bin"), 1:3, sep = ""), paste(c("cat"), 1:3, sep = ""))
+distmix(mixdata, method = "gower", idnum = 1:3, idbin = 4:6, idcat = 7:9)
+distmix(mixdata, method = "wishart", idnum = 1:3, idbin = 4:6, idcat = 7:9)
+```
+
+## 3. K-medoids algorithms
+
+There are some k-medoids algorithms, partitioning around medoids, for example, is available in [**cluster**](https://cran.r-project.org/package=cluster) package. For this moment, in **kmed** package, the available algorithm is park and jun.
+```{r}
+result <- fastkmed(mrwdist, ncluster = 3, iterate = 50)
+table(result$cluster, iris[,5])
+```
+
+## 4. Bootstrap evaluation
+
+### A. Bootstrap replicate matrix
+
+To evaluate the clustering algorithm, a bootstrap evaluation can be run by make a function. This function input arguments must be only a distance matrix and a number of cluster and the output is only membership.
+```{r}
+k <- 3
+parkboot <- function(x, nclust) {
+  res <- fastkmed(x, nclust, iterate = 50)
+  return(res$cluster)
+}
+irisboot <- clustboot(mrwdist, nclust=k, parkboot, nboot=50)
+irisboot[1:5,c(1:5,46:50)]
+```
+We can change the algorithm, for example `kmeans` from **stats** package.
+```{r}
+kmboot <- function(x, nclust) {
+  res <- kmeans(x, nclust)
+  return(res$cluster)
+}
+kmboot <- clustboot(num, nclust=k, kmboot, nboot=50, diss = FALSE)
+kmboot[1:5,c(1:5,46:50)]
+```
+
+
+### B. Consensus matrix
+
+A consensus matrix  (n x n) can be produced from a bootstrap replicate matrix. The `reorder` input is a function to reorder the objects in the consensus matrix. This function input arguments must be only a distance matrix and a number of cluster and the output is only membership. This matrix can be visualized using heatmap directly.
+```{r}
+wardorder <- function(x, nclust) {
+  res <- hclust(x, method = "ward.D2")
+  member <- cutree(res, nclust)
+  return(member)
+}
+consensusiris <- consensusmatrix(irisboot, nclust = k, wardorder)
+consensusiris[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
+```
+
+### C. Visualization (Heatmap)
+
+To produce a heatmap of consensus matrix `clustheatmap` can be applied in the consensus matrix. The consensus matrix heatmap of Iris data by Park and Jun is produced.
+```{r}
+clustheatmap(consensusiris, "Iris Data via Park and Jun")
+```
+
+We can also create a heatmap of the kmeans algorithm for the iris data.
+```{r}
+consensusiris2 <- consensusmatrix(kmboot, nclust = k, wardorder)
+clustheatmap(consensusiris2, "Iris Data via kmeans")
+```
+
