@@ -1,4 +1,4 @@
-#' A co-occurrence distance for binary/ categorical variables data.
+#' Co-occurrence distance for binary/ categorical variables data.
 #'
 #' @description This function computes and returns the distance matrix computed by
 #' co-occurence distance.
@@ -19,12 +19,12 @@
 #' @examples
 #' set.seed(1)
 #' a <- matrix(sample(1:2, 7*3, replace = TRUE), 7, 3)
-#' coocurance(a)
+#' cooccur(a)
 #'
 #'
 #' @export
 
-coocurance <- function(data) {
+cooccur <- function(data) {
 
   if(is.integer(data)==FALSE) stop ("The values in the matrix/ data frame are not integers.")
 
@@ -71,3 +71,7 @@ coocurance <- function(data) {
   }
   return(distmat)
 }
+
+
+
+

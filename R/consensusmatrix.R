@@ -1,4 +1,4 @@
-#' A consensus matrix from A bootstrap replicate matrix
+#' Consensus matrix from A bootstrap replicate matrix
 #'
 #' @description This function create a consensus matrix from a bootstrap
 #' replicate matrix.

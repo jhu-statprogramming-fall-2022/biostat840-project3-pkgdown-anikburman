@@ -31,5 +31,5 @@ mrwdist[1:6,1:6]
 
 }
 \author{
-Weksi Budiaji
+Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 }

@@ -2,9 +2,9 @@
 % Please edit documentation in R/fastkmed.R
 \name{fastkmed}
 \alias{fastkmed}
-\title{A simple and fast k-medoid algorithm from Park and Jun.}
+\title{Simple and fast k-medoid algorithm from Park and Jun.}
 \usage{
-fastkmed(distdata, ncluster, iterate = 10)
+fastkmed(distdata, ncluster, iterate = 10, init = NULL)
 }
 \arguments{
 \item{distdata}{A matrix of distance objects (n x n) or a diss class.}
@@ -12,6 +12,8 @@ fastkmed(distdata, ncluster, iterate = 10)
 \item{ncluster}{A number of cluster.}
 
 \item{iterate}{A number of iteration for clustering algorithm.}
+
+\item{init}{An index of the initial medoids.}
 }
 \value{
 Function returns a partitioning clustering algorithm result consists of cluster
@@ -19,13 +21,12 @@ membership, cluster medoid, the minimum distance to the cluster medoid.
 }
 \description{
 This function computes and returns the clustering result
-computed by using a specified distance via Park and Jun's k-medoids.
+computed by using a specified distance via Park and Jun's algorithm.
 }
 \details{
-This is a two-data-set equivalent of the standard function of distance.
-It returns a matrix of all pairwise distances between rows in data1 and data2. \cr
-For a list of available numerical distance, binary and categorical distance, one can
-search by \code{distname()}
+This is a k-medoids algorithm that has been proposed by Park and Jun. The algorihm
+has been claimed to be fast and simple. The medoids updating in this algorihm is similar to
+kmeans centroid updating.
 }
 \examples{
 num <- as.matrix(iris[,1:4])

@@ -1,4 +1,4 @@
-#' A consensus matrix heatmap from A consensus matrix
+#' Consensus matrix heatmap from A consensus matrix
 #'
 #' @description This function create a consensus matrix heatmap from a consensus
 #' matrix.

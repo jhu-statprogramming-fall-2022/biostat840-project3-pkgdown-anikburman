@@ -2,7 +2,7 @@
 % Please edit documentation in R/distmix.R
 \name{distmix}
 \alias{distmix}
-\title{A distance for mixed variables.}
+\title{Distances for mixed variables.}
 \usage{
 distmix(data, method = "gower", idnum = NULL, idbin = NULL,
   idcat = NULL)
@@ -11,7 +11,7 @@ distmix(data, method = "gower", idnum = NULL, idbin = NULL,
 \item{data}{A data frame or a matrix object.}
 
 \item{method}{A  distance for mixed variables: "gower", "wishart", "podani",
-"huang", and "harikumar".}
+"huang", "harikumar", and "ahmad".}
 
 \item{idnum}{A vector of index of numerical variables.}
 
@@ -27,9 +27,9 @@ the specified distance measure to compute the mixed variable data.
 This is a function to compute distance of mixed variable data.
 It returns a matrix of all object distances.
 The available distance are Gower ("gower"), Wishart ("wishart"), Podani ("podani"),
-Huang ("huang"), and Harikumar-PV ("harikumar"). Because it computes distance of mixed
-variable data, at least two different class of variables in idnum, idbin, or idcat
-must be supplied, such as numerical and binary or binary and categorical indices.
+Huang ("huang"), Harikumar-PV ("harikumar"), Achmad-Dey ("ahmad"). Because it computes
+distance of mixed variable data, at least two different class of variables in idnum, idbin,
+or idcat must be supplied, such as numerical and binary or binary and categorical indices.
 }
 \examples{
 set.seed(1)
@@ -43,6 +43,9 @@ distmix(mixdata, method = "gower", idnum = 1:3, idbin = 4:6, idcat = 7:9)
 
 }
 \references{
+Ahmad, A., and Dey, L. 2007. A K-mean clustering algorithm for mixed numeric
+and categorical data. Data and Knowledge Engineering 63, 503-527.
+
 Gower, J., 1971. A general coefficient of similarity and some of its properties.
 Biometrics 27, 857-871
 
@@ -63,5 +66,5 @@ University of Munich, March 14-16, 2001, Springer Berlin Heidelberg, Berlin,
 Heidelberg. pp. 216-226.
 }
 \author{
-Weksi Budiaji
+Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 }

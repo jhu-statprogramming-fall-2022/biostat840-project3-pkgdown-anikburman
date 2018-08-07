@@ -12,7 +12,7 @@
 #' The available distance are Manhattan weighted by rank ("mrw"), Squared Euclidean weighted by
 #' variance ("sev"), Squared Euclidean weighted by rank ("ser"), and Squared Euclidean ("se").
 #'
-#' @author Weksi Budiaji
+#' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 #'
 #' @importFrom stats var
 #'

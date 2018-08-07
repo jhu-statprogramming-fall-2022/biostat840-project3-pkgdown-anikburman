@@ -1,16 +1,16 @@
-#' A simple and fast k-medoid algorithm from Park and Jun.
+#' Simple and fast k-medoid algorithm from Park and Jun.
 #'
 #' @description This function computes and returns the clustering result
-#' computed by using a specified distance via Park and Jun's k-medoids.
+#' computed by using a specified distance via Park and Jun's algorithm.
 #'
 #' @param distdata A matrix of distance objects (n x n) or a diss class.
 #' @param ncluster A number of cluster.
 #' @param iterate A number of iteration for clustering algorithm.
+#' @param init An index of the initial medoids.
 #'
-#' @details This is a two-data-set equivalent of the standard function of distance.
-#' It returns a matrix of all pairwise distances between rows in data1 and data2. \cr
-#' For a list of available numerical distance, binary and categorical distance, one can
-#' search by \code{distname()}
+#' @details This is a k-medoids algorithm that has been proposed by Park and Jun. The algorihm
+#' has been claimed to be fast and simple. The medoids updating in this algorihm is similar to
+#' kmeans centroid updating.
 #'
 #' @return Function returns a partitioning clustering algorithm result consists of cluster
 #' membership, cluster medoid, the minimum distance to the cluster medoid.
@@ -29,7 +29,7 @@
 #'
 #' @export
 
-fastkmed <- function(distdata, ncluster, iterate = 10) {
+fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
 
   if(any(is.na(distdata))) stop("Cannot handle missing values!")
 
@@ -48,8 +48,14 @@ fastkmed <- function(distdata, ncluster, iterate = 10) {
 
   n <- nrow(distdata)
   index <- 1:n
-  sorted_object <- order(unique(colSums(distdata/sum(distdata))))
-  medoid_init <- sorted_object[1:ncluster]
+  if (is.null(init) == TRUE) {
+    sorted_object <- order(unique(colSums(distdata/sum(distdata))))
+    medoid_init <- sorted_object[1:ncluster]
+  } else {
+    if (ncluster != length(init)) stop("The initial medoids must equal to the number of clusters")
+    medoid_init <- init
+  }
+
 
   dist_0 <- distdata[,medoid_init]
   member_0 <- apply(dist_0, 1, which.min)

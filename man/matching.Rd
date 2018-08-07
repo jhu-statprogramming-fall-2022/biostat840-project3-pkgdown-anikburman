@@ -26,5 +26,5 @@ matching(a, a)
 
 }
 \author{
-Weksi Budiaji
+Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 }

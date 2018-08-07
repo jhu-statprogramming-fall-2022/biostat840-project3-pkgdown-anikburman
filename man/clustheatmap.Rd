@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustheatmap.R
 \name{clustheatmap}
 \alias{clustheatmap}
-\title{A consensus matrix heatmap from A consensus matrix}
+\title{Consensus matrix heatmap from A consensus matrix}
 \usage{
 clustheatmap(consmat, title = "")
 }

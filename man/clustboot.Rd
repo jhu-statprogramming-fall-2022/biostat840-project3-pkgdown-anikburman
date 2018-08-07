@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustboot.R
 \name{clustboot}
 \alias{clustboot}
-\title{A Bootstrap replications for clustering alorithm}
+\title{Bootstrap replications for clustering alorithm}
 \usage{
 clustboot(distdata, nclust = 2, algorithm, nboot = 25, diss = TRUE)
 }

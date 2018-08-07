@@ -2,7 +2,7 @@
 % Please edit documentation in R/consensusmatrix.R
 \name{consensusmatrix}
 \alias{consensusmatrix}
-\title{A consensus matrix from A bootstrap replicate matrix}
+\title{Consensus matrix from A bootstrap replicate matrix}
 \usage{
 consensusmatrix(bootdata, nclust, reorder)
 }

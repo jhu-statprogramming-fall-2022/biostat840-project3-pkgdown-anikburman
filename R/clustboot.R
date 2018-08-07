@@ -1,4 +1,4 @@
-#' A Bootstrap replications for clustering alorithm
+#' Bootstrap replications for clustering alorithm
 #'
 #' @description This function do bootstrap replications for a cluster algorithm.
 #'

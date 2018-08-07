@@ -3,6 +3,66 @@ title: "K-medoids Distance-Based clustering"
 author: "Weksi Budiaji"
 date: "`r Sys.Date()`"
 output: html_vignette
+references:
+- id: park
+  title: A simple and fast algorithm for K-medoids clustering
+  author:
+  - family: Park
+    given: H.
+  - family: Jun
+    given: C.
+  container-title: Expert Systems with Applications
+  volume: 36
+  URL: 'https://doi.org/10.1016/j.eswa.2008.01.039'
+  DOI: 10.1016/j.eswa.2008.01.039
+  issue: 2
+  publisher: Elsevier
+  page: 3336-3341
+  type: article-journal
+  issued:
+    year: 2009
+    month: 2
+- id: zadegan
+  title: Ranked k-medoids A fast and accurate rank-based partitioning algorithm for clustering large datasets
+  author:
+  - family: Zadegan
+    given: S.M.R
+  - family: Mirzaie
+    given: M.
+  - family: Sadoughi
+    given: F.    
+  container-title: Knowledge-Based Systems
+  volume: 39
+  URL: 'https://doi.org/10.1016/j.knosys.2012.10.012'
+  DOI: 10.1016/j.knosys.2012.10.012
+  publisher: Elsevier
+  page: 133-143
+  type: article-journal
+  issued:
+    year: 2013
+    month: 2
+- id: yu
+  title: An improved K-medoids algorithm based on step increasing and optimizing medoids
+  author:
+  - family: Yu
+    given: D.
+  - family: Liu
+    given: G.
+  - family: Guo
+    given: M.
+  - family: Liu
+    given: X.      
+  container-title: Expert Systems with Applications
+  volume: 92
+  URL: 'https://doi.org/10.1016/j.eswa.2017.09.052'
+  DOI: 10.1016/j.eswa.2017.09.052
+  publisher: Elsevier
+  page: 464-473
+  type: article-journal
+  issued:
+    year: 2018
+    month: 2
+        
 vignette: >
   %\VignetteIndexEntry{K-medoids Distance-Based clustering}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,18 +71,24 @@ vignette: >
 
 ## 1. Introduction
 
-The **kmed** package was designed to analyse k-medoids based clustering; the features include:
+The [**kmed**](https://cran.r-project.org/package=kmed) package was designed to analyse k-medoids based clustering. The features include: 
 
-- distance computation (numerical, binary, categorical, and mixed variables)
-- k-medoids algorithms
-- bootstrap evaluation and visualization
+* distance computation:
+    + numerical variables (manhattan weighted by rank, squared euclidean weighted by rank, squared euclidean weighted by variance, unweighted squared euclidean)
+    + binary and categorical variables (simple matching and cooccurrence)
+    + mixed variables (gower, wishart, podani, huang, harikumar-pv, and ahmad-dey)
+* k-medoids algorithms:
+    + a simple and fast k-medoids [@park]
+    + rank k-medoids [@zadegan]
+    + step k-medoids [@yu]
+* bootstrap evaluation and visualization
 
 
 ## 2. Distance Computation
 
 ### A. Numerical variables
 
-There are four distance options, i.e. manhattan weighted by rank (`mrw`), squared euclidean weighted by rank (`ser`) and variance (`sev`), and squared euclidean unweighted (`se`). The `distNumeric` in the `method` provides its desired distance method.
+For numerical variables, there are four distance options, namely manhattan weighted by rank (`mrw`), squared euclidean weighted by rank (`ser`) and squared euclidean weighted by variance (`sev`), and unweighted squared euclidean (`se`). The `distNumeric` function provides `method` in which the desired distance method can be chosen. The manhattan weighted by rank is applied in the popular iris data in this article.
 ```{r}
 library(kmed)
 num <- as.matrix(iris[,1:4])
@@ -32,81 +98,97 @@ mrwdist[1:6,1:6]
 
 ### B. Binary and Categorical variables
 
-Two options of distances are available for binary or categorical variables, namely simple matching (`matching`) and coocurrence (`coocurrence`) distance.
+For binary and categorical variables, on the other hand, two distance methods are available, i.e. simple matching (`matching`) and coocurrence (`cooccur`) distance. The `matching` function requires two matrices/ data frames, while the `cooccurrence` only needs one matrix/ data frame.
 ```{r}
 set.seed(1)
 a <- matrix(sample(1:2, 7*3, replace = TRUE), 7, 3)
 matching(a, a)
-coocurance(a)
+cooccur(a)
 ```
 
 ### C. Mixed variables
 
-There are five distances for mixed variables data, i.e gower (`gower`), wishart (`wishart`), podani (`podani`), huang (`huang`) and harikumar-pv (`harikumar`).
+There are six distance methods for mixed variables data, namely gower (`gower`), wishart (`wishart`), podani (`podani`), huang (`huang`), harikumar-pv (`harikumar`), ahmad and dey (`ahmad`). The `distmix` function calculates mixed variable distance in which it requires *column id* of each class of variables. As an example, we create a 7 by 9 data frame that consists of three variables in each class. Then `gower` and `wishart` distances are calculated.
+
 ```{r}
 a1 <- matrix(sample(1:3, 7*3, replace = TRUE), 7, 3)
 mixdata <- cbind(iris[1:7,1:3], a, a1)
 colnames(mixdata) <- c(paste(c("num"), 1:3, sep = ""), paste(c("bin"), 1:3, sep = ""), paste(c("cat"), 1:3, sep = ""))
+mixdata
 distmix(mixdata, method = "gower", idnum = 1:3, idbin = 4:6, idcat = 7:9)
 distmix(mixdata, method = "wishart", idnum = 1:3, idbin = 4:6, idcat = 7:9)
 ```
 
 ## 3. K-medoids algorithms
 
-There are some k-medoids algorithms, partitioning around medoids, for example, is available in [**cluster**](https://cran.r-project.org/package=cluster) package. For this moment, in **kmed** package, the available algorithm is park and jun.
+There are some k-medoids algorithms, partitioning around medoids (`pam`), for example, is available in [**cluster**](https://cran.r-project.org/package=cluster) package. In [**kmed**](https://cran.r-project.org/package=kmed) package, the available algorithm is simple and fast k-medoids (`fastkmed`), ranked k-medoids (`rankkmed`), and step k-medoids (`stepkmed`). 
+
 ```{r}
 result <- fastkmed(mrwdist, ncluster = 3, iterate = 50)
-table(result$cluster, iris[,5])
+(fastiris <- table(result$cluster, iris[,5]))
+(misclass <- (1-sum(diag(fastiris))/length(iris[,5]))*100)
 ```
+
+Applying `fastkmed` in iris data with manhattan weighted by rank, the misclassification is `r round(misclass,2)` %.
 
 ## 4. Bootstrap evaluation
 
 ### A. Bootstrap replicate matrix
 
-To evaluate the clustering algorithm, a bootstrap evaluation can be run by make a function. This function input arguments must be only a distance matrix and a number of cluster and the output is only membership.
+To evaluate a clustering algorithm, a bootstrap evaluation function (`clustboot`) can be applied. Before applying `clustboot`, a clustering algorihtm that will be evaluated must be created first. The evaluated clustering algorithm must consist of two arguments, i.e. the distance/ matrix and the number of cluster. Then, the output must be a vector of membership. We create two functions of clustering algorihtm that will be evaluated by the bootstrap. The first is a simple and fast k-medoids and the second is k-means algorithm, which is get from `kmeans` function in **stats** package.
 ```{r}
 k <- 3
+# a simple and fast k-medoids function for bootstrap evaluation
 parkboot <- function(x, nclust) {
   res <- fastkmed(x, nclust, iterate = 50)
   return(res$cluster)
 }
-irisboot <- clustboot(mrwdist, nclust=k, parkboot, nboot=50)
-irisboot[1:5,c(1:5,46:50)]
-```
-We can change the algorithm, for example `kmeans` from **stats** package.
-```{r}
+
+# k-means function for bootstrap evaluation
 kmboot <- function(x, nclust) {
   res <- kmeans(x, nclust)
   return(res$cluster)
 }
-kmboot <- clustboot(num, nclust=k, kmboot, nboot=50, diss = FALSE)
-kmboot[1:5,c(1:5,46:50)]
+```
+
+The result is a *n x b* matrix, where *n* is the number of objects and *b* is the number of bootstrap replicates.
+
+```{r}
+fastkmedboot <- clustboot(mrwdist, nclust=k, parkboot, nboot=50)
+kmeansboot <- clustboot(num, nclust=k, kmboot, nboot=50, diss = FALSE)
+fastkmedboot[1:5,c(1:5,46:50)]
+kmeansboot[1:5,c(1:5,46:50)]
 ```
 
 
 ### B. Consensus matrix
 
-A consensus matrix  (n x n) can be produced from a bootstrap replicate matrix. The `reorder` input is a function to reorder the objects in the consensus matrix. This function input arguments must be only a distance matrix and a number of cluster and the output is only membership. This matrix can be visualized using heatmap directly.
+A consensus matrix  (*n x n*) can be produced from a bootstrap replicate matrix. To create the consensus matrix, a function to order the objects is required. The `consensusmatrix` function provides `reorder` in which a reorder method can be supplied. The `reorder` method must have two input arguments, namely a distance matrix and a number of clusters. Meanwhile, the output is only a membership. For example, hierarchical cluster algorithm with ward linkage is applied to order the objects in the consensus matrix.
 ```{r}
 wardorder <- function(x, nclust) {
   res <- hclust(x, method = "ward.D2")
   member <- cutree(res, nclust)
   return(member)
 }
-consensusiris <- consensusmatrix(irisboot, nclust = k, wardorder)
-consensusiris[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
+consensusfastkmed <- consensusmatrix(fastkmedboot, nclust = k, wardorder)
+consensusfastkmed[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
 ```
+
+This consensus matrix can then be visualized using heatmap directly.
 
 ### C. Visualization (Heatmap)
 
-To produce a heatmap of consensus matrix `clustheatmap` can be applied in the consensus matrix. The consensus matrix heatmap of Iris data by Park and Jun is produced.
+To produce a heatmap of consensus matrix `clustheatmap` can be applied in the consensus matrix. The consensus matrix heatmap of Iris data by simple and fast k-medoids is produced.
 ```{r}
-clustheatmap(consensusiris, "Iris Data via Park and Jun")
+clustheatmap(consensusfastkmed, "Iris Data via Fast K-medoids")
 ```
 
-We can also create a heatmap of the kmeans algorithm for the iris data.
+We can also create a heatmap of the consensus matrix fromm the k-means algorithm bootstraping.
 ```{r}
-consensusiris2 <- consensusmatrix(kmboot, nclust = k, wardorder)
-clustheatmap(consensusiris2, "Iris Data via kmeans")
+consensuskmeans <- consensusmatrix(kmeansboot, nclust = k, wardorder)
+clustheatmap(consensuskmeans, "Iris Data via K-means")
 ```
 
+***
+
+# References

@@ -1,11 +1,11 @@
-#' A distance for mixed variables.
+#' Distances for mixed variables.
 #'
 #' @description This function computes and returns the distance matrix computed by using
 #' the specified distance measure to compute the mixed variable data.
 #'
 #' @param data A data frame or a matrix object.
 #' @param method A  distance for mixed variables: "gower", "wishart", "podani",
-#' "huang", and "harikumar".
+#' "huang", "harikumar", and "ahmad".
 #' @param idnum A vector of index of numerical variables.
 #' @param idbin A vector of index of binary variables.
 #' @param idcat A vector of index of categorical variables.
@@ -13,12 +13,14 @@
 #' @details This is a function to compute distance of mixed variable data.
 #' It returns a matrix of all object distances.
 #' The available distance are Gower ("gower"), Wishart ("wishart"), Podani ("podani"),
-#' Huang ("huang"), and Harikumar-PV ("harikumar"). Because it computes distance of mixed
-#' variable data, at least two different class of variables in idnum, idbin, or idcat
-#' must be supplied, such as numerical and binary or binary and categorical indices.
+#' Huang ("huang"), Harikumar-PV ("harikumar"), Achmad-Dey ("ahmad"). Because it computes
+#' distance of mixed variable data, at least two different class of variables in idnum, idbin,
+#' or idcat must be supplied, such as numerical and binary or binary and categorical indices.
 #'
-#' @author Weksi Budiaji
+#' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 #'
+#' @references Ahmad, A., and Dey, L. 2007. A K-mean clustering algorithm for mixed numeric
+#' and categorical data. Data and Knowledge Engineering 63, 503-527.
 #' @references Gower, J., 1971. A general coefficient of similarity and some of its properties.
 #' Biometrics 27, 857-871
 #' @references Harikumar, S., PV, S., 2015. K-medoid clustering for heterogeneous data sets.
@@ -61,7 +63,7 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
   if(is.null(idbin)&&is.null(idcat)||is.null(idnum)&&is.null(idcat)||is.null(idnum)&&is.null(idbin))
     stop("There is no mixed variables!")
 
-  dist_num4 <- c("gower", "wishart", "podani","huang", "harikumar")
+  dist_num4 <- c("gower", "wishart", "podani","huang", "harikumar", "ahmad")
   method <- match.arg(method, dist_num4)
 
   if(is.null(idnum)) {
@@ -77,7 +79,8 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
         wishart = distNumeric(x, x, method = "sev"),
         podani = distNumeric(x, x, method = "ser"),
         huang = distNumeric(x, x, method = "se"),
-        harikumar = as.matrix(dist(x, method = "manhattan")))
+        harikumar = as.matrix(dist(x, method = "manhattan")),
+        ahmad = distNumeric(x, x, method = "se"))
   }
 
   if(is.null(idbin)) {
@@ -86,10 +89,14 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
   } else {
     bin <- length(idbin)
     dist_matchbin <- matching(data[,idbin, drop=FALSE], data[,idbin, drop=FALSE])
-    if (method == "harikumar") {
-      dist_binary <- dist_matchbin*bin
+    if (method == "ahmad") {
+      dist_binary <- cooccur(data[,idbin, drop=FALSE])
     } else {
-      dist_binary <- dist_matchbin
+      if (method == "harikumar") {
+        dist_binary <- dist_matchbin*bin
+      } else {
+        dist_binary <- dist_matchbin
+      }
     }
   }
 
@@ -99,8 +106,8 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
   } else {
     cat <- length(idcat)
     dist_matchcat <- matching(data[,idcat, drop=FALSE], data[,idcat, drop=FALSE])
-    if (method == "harikumar") {
-      dist_cat <- coocurance(data[,idcat, drop=FALSE])
+    if (method == "harikumar" | method == "ahmad") {
+      dist_cat <- cooccur(data[,idcat, drop=FALSE])
     } else {
       dist_cat <- dist_matchcat
     }
@@ -112,7 +119,8 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
       wishart = dist_numeric*1/nvar + dist_binary*bin/nvar + dist_cat*cat/nvar,
       podani = (dist_numeric + dist_binary*bin + dist_cat*cat)^0.5,
       huang = dist_numeric + dist_binary*msd + dist_cat*msd,
-      harikumar = dist_numeric + dist_binary + dist_cat)
+      harikumar = dist_numeric + dist_binary + dist_cat,
+      ahmad = dist_numeric + (dist_binary + dist_cat)^2)
 
   return(dist_mix)
 

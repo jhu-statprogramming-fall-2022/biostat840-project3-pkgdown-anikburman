@@ -9,7 +9,7 @@
 #' @details This is a function to compute simple matching distance.
 #' It returns a matrix of distance objects, i.e n x n.
 #'
-#' @author Weksi Budiaji
+#' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 #'
 #' @examples
 #' set.seed(1)
