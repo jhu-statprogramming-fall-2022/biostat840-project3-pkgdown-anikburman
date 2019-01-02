@@ -3,8 +3,8 @@
 #' @description This function computes and returns the distance matrix computed by
 #' co-occurence distance.
 #'
-#' @param data A matrix or data frame of binary/ categorical variables. The values of matrix are
-#' integer, i.e 1, 2, 3, ....
+#' @param data A matrix or data frame of binary/ categorical variables. The values of matrix
+#' should be integer, i.e 1, 2, 3, ...., or will be converted to integer otherwise.
 #'
 #' @details This is a function to compute a co-occurence distance.
 #' It returns a matrix of distance objects , i.e n x n.
@@ -26,7 +26,14 @@
 
 cooccur <- function(data) {
 
-  if(is.integer(data)==FALSE) stop ("The values in the matrix/ data frame are not integers.")
+  if((is.matrix(data)||is.data.frame(data))==FALSE)
+    stop("The data must be a matrix or a data frame!")
+
+  if(is.logical(data)==TRUE) data <- data.matrix(as.data.frame(data)) + as.integer(1)
+
+  if(is.numeric(data)==TRUE) data <- apply(data, 2, function(x) as.integer(x))
+
+  if(is.data.frame(data)==TRUE) data <- apply(data, 2, function(x) as.integer(as.factor(x)))
 
   col <- ncol(data)
 

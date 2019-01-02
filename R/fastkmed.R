@@ -49,7 +49,14 @@ fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
   n <- nrow(distdata)
   index <- 1:n
   if (is.null(init) == TRUE) {
-    sorted_object <- order(unique(colSums(distdata/sum(distdata))))
+    # sorted_object <- order(unique(colSums(distdata/sum(distdata))))
+    # medoid_init <- sorted_object[1:ncluster]
+    distsum <- colSums(distdata/sum(distdata))
+    names(distsum) <- index
+    iduniq <- as.numeric(names(distsum [!duplicated(distsum)]))
+    distuniq <- unique(distsum)
+    names(distuniq) <- iduniq
+    sorted_object <- as.numeric(names(sort(distuniq)))
     medoid_init <- sorted_object[1:ncluster]
   } else {
     if (ncluster != length(init)) stop("The initial medoids must equal to the number of clusters")
@@ -112,13 +119,10 @@ fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
   member_2 <- apply(dist_2, 1, which.min)
   E2 <- sum(apply(dist_2, 1, min))
 
-  #totss <- sum(distdata[sorted_object[1],])
-  #betweenss <- totss-E2
   names(member_2) <- rownames(distdata)
-  #medoid <- distdata[medoid_2,]
 
   result <- list(cluster = member_2, medoid = medoid_2, minimum_distance = E2)#,
-  #total_var = paste(round(betweenss/totss, 4)*100, "%" ))
+
   }
   else {
     dist_2 <- distdata[,medoid_1]

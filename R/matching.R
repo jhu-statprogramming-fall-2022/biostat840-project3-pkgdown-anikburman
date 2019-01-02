@@ -27,7 +27,7 @@ matching <- function(x, y) {
   y <- data.matrix(y)
   z <- matrix(0, nrow=nrow(x), ncol=nrow(y))
   for(i in 1:nrow(y)){
-    z[,i] <- colSums(1/ abs((t(x) - y[i,])/(t(x) - y[i,]))^2, na.rm = TRUE)/ncol(x)
+    z[,i] <- colSums(1/ ((t(x) - y[i,])/(t(x) - y[i,])), na.rm = TRUE)/ncol(x)
   }
   rownames(z) <- rownames(x)
   colnames(z) <- rownames(y)

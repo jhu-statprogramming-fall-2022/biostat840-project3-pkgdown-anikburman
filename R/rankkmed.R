@@ -84,7 +84,7 @@ rankkmed <- function (distdata, ncluster, m = 3, iterate = 10, initial = NULL) {
     }
     medoid_0 <- c(unlist(lmedoid)[evalmed==1], unique(unlist(lmedoid)[evalmed>1]))
     groupsave[[iter]] <- unlist(group)
-    lsample <- unlist(groupsave)
+    lsample <- unlist(groupsave[[iter]])
     if (length(medoid_0)!=ncluster) {
       id2 <- c(1:n)[-lsample]
       medoid_1 <- c(medoid_0, sample(id2, ncluster-length(medoid_0)))

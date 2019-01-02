@@ -36,6 +36,7 @@ clustboot <- function(distdata, nclust=2, algorithm, nboot=25, diss = TRUE) {
 
   if((is.matrix(distdata)||class(distdata)=="dist")==FALSE)
     stop("The distdata must be a matrix or a dist object!")
+  if(class(distdata)=="dist") distdata <- as.matrix(distdata)
 
   matboot <- matrix(0, nrow = nrow(distdata), ncol = nboot)
   algorithm <- match.fun(algorithm)

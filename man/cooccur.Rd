@@ -7,8 +7,8 @@
 cooccur(data)
 }
 \arguments{
-\item{data}{A matrix or data frame of binary/ categorical variables. The values of matrix are
-integer, i.e 1, 2, 3, ....}
+\item{data}{A matrix or data frame of binary/ categorical variables. The values of matrix
+should be integer, i.e 1, 2, 3, ...., or will be converted to integer otherwise.}
 }
 \value{
 A matrix of distance from binary/ categorical variable.
