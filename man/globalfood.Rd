@@ -6,12 +6,19 @@
 \title{Global food security index}
 \format{A data frame with 113 rows and 4 variables:
 \describe{
-  \item{affordability}{affordability}
-  \item{availability}{availability}
-  \item{safety}{safety}
-  \item{resilience}{resilience}
+  \item{affordability}{Index of food affordability.}
+  \item{availability}{Index of food availability.}
+  \item{safety}{Index of food quality and safety.}
+  \item{resilience}{Index of natural resources and resilience.}
 }}
 \source{
+The original indicator variables consist of 27 variables. Then,
+they are summarized into four pillars of food security; they are
+affordability, availability, quality and safety, and natural resources
+and resilience. Food-security expertise panelists evaluate the score of
+each country from 0 to 100, where 0 is the least favorable towards food
+security.
+
 \url{http://foodsecurityindex.eiu.com}
 }
 \usage{
@@ -19,6 +26,6 @@ globalfood
 }
 \description{
 A dataset containing four variables of 113 countries for their food security
-index based on panelists evaluation.
+index based on panelists evaluation in 2017.
 }
 \keyword{datasets}

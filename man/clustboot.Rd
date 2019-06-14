@@ -4,41 +4,78 @@
 \alias{clustboot}
 \title{Bootstrap replications for clustering alorithm}
 \usage{
-clustboot(distdata, nclust = 2, algorithm, nboot = 25, diss = TRUE)
+clustboot(distdata, nclust = 2, algorithm = fastclust, nboot = 25,
+  diss = TRUE)
 }
 \arguments{
-\item{distdata}{A matrix of distance objects (n x n) or a diss class.}
+\item{distdata}{A distance matrix (\emph{n x n})/ \emph{dist} object or
+a data frame.}
 
-\item{nclust}{The number of clusters}
+\item{nclust}{A number of clusters.}
 
-\item{algorithm}{Any clustering algorithm function with the end result being only membership.}
+\item{algorithm}{A clustering algorithm function (\emph{see} \strong{Details}).}
 
-\item{nboot}{The number of bootstrap replicates}
+\item{nboot}{A number of bootstrap replicates.}
 
-\item{diss}{A logical if the distdata is a dist or matrix object.}
+\item{diss}{A logical if \code{distdata} is a distance matrix/ object or
+a data frame.}
 }
 \value{
-Function returns a bootstrap cluster matrix (n x number of bootstrap replicates).
+Function returns a matrix of bootstrap replicates with a dimension of
+\emph{n x b}, where \emph{n} is the number of objects and \emph{b} is the
+number of bootstrap replicates.
 }
 \description{
-This function do bootstrap replications for a cluster algorithm.
+This function does bootstrap replications for a clustering
+algorithm. Any hard clustering algorithm is valid.
 }
 \details{
-This is a function to obtain bootstrap evaluation for a cluster. The cluster matrix
-can be further analyzed. In the algorithm function, the input arguments are only a distance/ matrix
-and a number of cluster.The output is only the membership.
+This is a function to obtain bootstrap evaluation for cluster results.
+The \code{algorithm} argument is a function where this function has two input
+arguments. The two input arguments are a \emph{distance matrix/ object} or
+a \emph{data frame}, and \emph{number of clusters}. Then the output is only
+a \emph{vector of cluster memberships}.
+
+The default \code{algorithm} is \code{fastclust} applying the
+\code{\link{fastkmed}} function. The code of the \code{fastclust} is
+
+fastclust <- function(x, nclust) \{
+
+res <- fastkmed(x, nclust, iterate = 50)
+
+return(res$cluster)
+
+\}
+
+For other examples, \emph{see} \strong{Examples}. It applies ward and kmeans
+algorithms. When kmeans is applied, for example, \code{diss} is set to be
+\code{FALSE} because the input of the \code{kmclust} and
+\code{\link{clustboot}} is a data frame instead of a distance.
 }
 \examples{
 num <- as.matrix(iris[,1:4])
 mrwdist <- distNumeric(num, num, method = "mrw")
-parkboot <- function(x, nclust) {
-res <- fastkmed(x, nclust, iterate = 50)
+ward.D2 <- function(x, nclust) {
+res <- hclust(as.dist(x), method = "ward.D2")
+member <- cutree(res, nclust)
+return(member)
+}
+kmclust <- function(x, nclust) {
+res <- kmeans(x, nclust)
 return(res$cluster)
 }
-irisboot <- clustboot(mrwdist, nclust=3, parkboot, nboot=7)
-head(irisboot)
+irisfast <- clustboot(mrwdist, nclust=3, nboot=7)
+head(irisfast)
+irisward <- clustboot(mrwdist, nclust=3, algorithm = ward.D2, nboot=7)
+head(irisward)
+iriskmeans <- clustboot(num, nclust=3, algorithm = kmclust, nboot=7, diss = FALSE)
+head(iriskmeans)
 
-
+}
+\references{
+Dolnicar, S. and Leisch, F. 2010. Evaluation of structure
+and reproducibility of cluster solutions using the bootstrap.
+Marketing Letters 21 pp. 83-101.
 }
 \author{
 Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}

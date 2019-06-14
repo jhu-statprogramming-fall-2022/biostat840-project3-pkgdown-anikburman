@@ -1,20 +1,38 @@
-#' Rank k-medoid algorithm from Zadegan et. al.
+#' Rank k-medoid algorithm
 #'
-#' @description This function computes and returns the clustering result
-#' computed by using a specified distance via rank k-medoids algorithm.
+#' @description This function runs the rank k-medoids algorithm proposed by
+#' Zadegan et. al. (2013).
 #'
-#' @param distdata A matrix of distance objects (n x n) or a diss class.
-#' @param ncluster A number of cluster.
-#' @param m A number of objects to compute hostility.
-#' @param iterate A number of iteration for clustering algorithm.
-#' @param initial A vector of initial objects as the cluster medoids.
+#' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
+#' @param ncluster A number of clusters.
+#' @param m A number of objects to compute hostility (\emph{see}
+#' \strong{Details}).
+#' @param iterate A number of iterations for the clustering algorithm.
+#' @param init A vector of initial objects as the cluster medoids
+#' (\emph{see} \strong{Details}).
 #'
-#' @details This is a k-medoids algorithm that has been proposed by Zadegan et. al. The algorihm
-#' has been claimed to be suitable for large dataset. The medoids updating in this algorihm is
-#' similar to kmeans centroid updating.
+#' @details This algorithm is claimed to cope with the local optima problem
+#' of the simple and fast-kmedoids algorithm (\code{\link{fastkmed}}). The
+#' \code{m} argument is defined by the user and has to be \eqn{1 < m \leq n}.
+#' The \code{m} is a hostility measure computed by
+#' \deqn{m_i = \sum_{X_j \in Y} r_{ij}}
+#' where \eqn{x_j} is the object \emph{j}, \emph{Y} is the set of objects
+#' as many as \emph{m}, and \eqn{r_{ij}} is the rank distance, i.e. sorted
+#' distance, between object \emph{i} and \emph{j}.
 #'
-#' @return Function returns a partitioning clustering algorithm result consists of cluster
-#' membership, cluster medoid, the minimum distance to the cluster medoid.
+#' \code{init} can be provided with a vector of id objects. The length of
+#' the vector has to be equal to the number of clusters. However, assigning
+#' a vector in the \code{init} argument, the algorithm is no longer the rank
+#' k-medoids algorithm.
+#'
+#' @return Function returns a list of components:
+#'
+#' \code{cluster} is the clustering memberships result.
+#'
+#' \code{medoid} is the id medoids.
+#'
+#' \code{minimum_distance} is the distance of all objects to their cluster
+#' medoid.
 #'
 #' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 #'
@@ -31,11 +49,11 @@
 #'
 #' @export
 
-rankkmed <- function (distdata, ncluster, m = 3, iterate = 10, initial = NULL) {
+rankkmed <- function (distdata, ncluster, m = 3, iterate = 10, init = NULL) {
 
   if (any(is.na(distdata)))
     stop("Cannot handle missing values!")
-  if ((is.matrix(distdata) || class(distdata) == "dist") ==
+  if ((is.matrix(distdata) || inherits(distdata, "dist")) ==
       FALSE)
     stop("The distdata must be a matrix or a dist object!")
   if (is.matrix(distdata) == TRUE) {
@@ -44,7 +62,7 @@ rankkmed <- function (distdata, ncluster, m = 3, iterate = 10, initial = NULL) {
     if (nc != nr)
       stop("The distdata is not an x n distance matrix!")
   }
-  if (class(distdata) == "dist")
+  if (inherits(distdata, "dist"))
     distdata <- as.matrix(distdata)
   n <- nrow(distdata)
   if (m < 2 || m > n) stop(paste("Give paramater m between 2 and", n))
@@ -60,12 +78,12 @@ rankkmed <- function (distdata, ncluster, m = 3, iterate = 10, initial = NULL) {
   for (i in 1:n) {
     sortedindex[i,] <- order(distdata[i,])
   }
-  if(is.null(initial)) {
+  if(is.null(init)) {
     medoid_init <- sort(sample(1:n, ncluster))
   } else {
-    if(length(unique(initial)) < ncluster) stop(paste("Initial medoids must be", ncluster,
+    if(length(unique(init)) < ncluster) stop(paste("Initial medoids must be", ncluster,
                                                       "unique objects."))
-    medoid_init <- initial
+    medoid_init <- init
   }
 
   iter <- 1
@@ -100,7 +118,7 @@ rankkmed <- function (distdata, ncluster, m = 3, iterate = 10, initial = NULL) {
   }
   finmedoid <- medoid_1
   member <- apply(R[,medoid_1], 1, which.min)
-  dist_2 <- distdata[,finmedoid]
+  dist_2 <- distdata[,finmedoid, drop = FALSE]
   E <- sum(apply(dist_2, 1, min))
 
   if (is.null(originrow)) {

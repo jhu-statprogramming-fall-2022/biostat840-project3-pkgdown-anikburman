@@ -2,24 +2,82 @@
 % Please edit documentation in R/cooccur.R
 \name{cooccur}
 \alias{cooccur}
-\title{Co-occurrence distance for binary/ categorical variables data.}
+\title{Co-occurrence distance for binary/ categorical variables data}
 \usage{
 cooccur(data)
 }
 \arguments{
-\item{data}{A matrix or data frame of binary/ categorical variables. The values of matrix
-should be integer, i.e 1, 2, 3, ...., or will be converted to integer otherwise.}
+\item{data}{A matrix or data frame of binary/ categorical variables
+(\emph{see} \strong{Details}).}
 }
 \value{
-A matrix of distance from binary/ categorical variable.
+Function returns a distance matrix (\emph{n x n}).
 }
 \description{
-This function computes and returns the distance matrix computed by
-co-occurence distance.
+This function calculates the co-occurrence distance proposed
+by Ahmad and Dey (2007).
 }
 \details{
-This is a function to compute a co-occurence distance.
-It returns a matrix of distance objects , i.e n x n.
+This function computes co-occurrence distance, which is a binary/
+categorical distance, that based on the other variable's distribution
+(\emph{see} \strong{Examples}).  In the \strong{Examples}, we have a data set:
+
+\tabular{lrrr}{
+object \tab x \tab y \tab z \cr
+1 \tab 1 \tab 2 \tab 2 \cr
+2 \tab 1 \tab 2 \tab 1 \cr
+3 \tab 2 \tab 1 \tab 2 \cr
+4 \tab 2 \tab 1 \tab 2 \cr
+5 \tab 1 \tab 1 \tab 1 \cr
+6 \tab 2 \tab 2 \tab 2 \cr
+7 \tab 2 \tab 1 \tab 2
+}
+
+The co-occurrence distance transforms each category of binary/ categorical
+in a variable based on the distribution of other variables, for example,
+the distance between categories 1 and 2 in the \emph{x} variable can be
+different to the distance between categories 1 and 2 in the \emph{z}
+variable. As an example, the transformed distance between categories 1 and 2
+in the \emph{z} variable is presented.
+
+A cross tabulation between the \emph{z} and \emph{x} variables with
+corresponding (column) proportion is
+
+\tabular{rrrrrr}{
+\tab 1 \tab 2 \tab ||\tab 1 \tab 2 \cr
+1 \tab 2 \tab 1 \tab ||\tab 1.0 \tab 0.2 \cr
+2 \tab 0 \tab 4 \tab ||\tab 0.0 \tab 0.8
+}
+
+A cross tabulation between the \emph{z} and \emph{y} variables with
+corresponding (column) proportion is
+
+\tabular{rrrrrr}{
+\tab 1 \tab 2 \tab ||\tab 1 \tab 2 \cr
+1 \tab 1 \tab 3 \tab ||\tab 0.5 \tab 0.6 \cr
+2 \tab 1 \tab 2 \tab ||\tab 0.5 \tab 0.4
+}
+
+Then, the maximum values of the proportion in each row are taken such that
+they are 1.0, 0.8, 0.6, and 0.5. The new distance between categories 1 and
+2 in the \emph{z} variable is
+\deqn{\delta_{1,2}^z = \frac{(1.0+0.8+0.6+0.5) - 2}{2} = 0.45}
+The constant \eqn{2} in the formula applies because the \emph{z} variable
+depends on the 2 other variable distributions, i.e the \emph{x} and \emph{y}
+variables. The new distances of each category in the
+for the \emph{x} and \emph{y} variables can be calculated in a similar way.
+
+Thus, the distance between objects 1 and 2 is 0.45. It is only the \emph{z}
+variable counted to calculate the distance between objects 1 and 2
+because objects 1 and 2 have similar values in both the \emph{x} and \emph{y}
+variables.
+
+The \code{data} argument can be supplied with either a matrix or data frame,
+in which the class of the element has to be an integer. If it is not
+an integer, it will be converted to an integer class. If the \code{data}
+of a variable only, a simple matching is calculated. The co-occurrence
+is absent due to its dependency to the distribution of other variables
+and a \code{warning} message appears.
 }
 \examples{
 set.seed(1)
@@ -29,6 +87,10 @@ cooccur(a)
 
 }
 \references{
+Ahmad, A., and Dey, L. 2007. A K-mean clustering algorithm for
+mixed numeric and categorical data. Data and Knowledge Engineering 63,
+pp. 503-527.
+
 Harikumar, S., PV, S., 2015. K-medoid clustering for heterogeneous data sets.
 JProcedia Computer Science 70, 226-237.
 }

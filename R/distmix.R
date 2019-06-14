@@ -1,40 +1,120 @@
-#' Distances for mixed variables.
+#' Distances for mixed variables data set
 #'
-#' @description This function computes and returns the distance matrix computed by using
-#' the specified distance measure to compute the mixed variable data.
+#' @description This function computes a distance matrix for a mixed
+#' variable data set applying various methods.
 #'
-#' @param data A data frame or a matrix object.
-#' @param method A  distance for mixed variables: "gower", "wishart", "podani",
-#' "huang", "harikumar", and "ahmad".
-#' @param idnum A vector of index of numerical variables.
-#' @param idbin A vector of index of binary variables.
-#' @param idcat A vector of index of categorical variables.
+#' @param data A data frame or matrix object.
+#' @param method A  method to calculate the mixed variables distance
+#' (\emph{see} \strong{Details}).
+#' @param idnum A vector of column index of the numerical variables.
+#' @param idbin A vector of column index of the binary variables.
+#' @param idcat A vector of column index of the categorical variables.
 #'
-#' @details This is a function to compute distance of mixed variable data.
-#' It returns a matrix of all object distances.
-#' The available distance are Gower ("gower"), Wishart ("wishart"), Podani ("podani"),
-#' Huang ("huang"), Harikumar-PV ("harikumar"), Achmad-Dey ("ahmad"). Because it computes
-#' distance of mixed variable data, at least two different class of variables in idnum, idbin,
-#' or idcat must be supplied, such as numerical and binary or binary and categorical indices.
+#' @details There are six methods available to calculate the mixed variable
+#' distance. They are \code{gower}, \code{wishart}, \code{podani},
+#' \code{huang}, \code{harikumar}, \code{ahmad}.
+#'
+#' \code{gower}
+#'
+#' The Gower (1971) distance is the most common distance for a mixed variable
+#' data set. Although the Gower distance accommodates missing values, a missing
+#' value is not allowed in this function. If there is a missing value, the Gower
+#' distance from the \code{daisy} function in the \pkg{cluster} package can be
+#' applied. The Gower distance between objects \emph{i} and \emph{j} is
+#' computed by
+#' \eqn{d_{ij} = 1 - s_{ij}}, where
+#' \deqn{s_{ij} = \frac{\sum_{l=1}^p \omega_{ijl} s_{ijl}}
+#' {\sum_{l=1}^p \omega_{ijl}}}
+#' \eqn{\omega_{ijl}} is a weight in variable \emph{l} that is usually 1 or 0
+#' (for a missing value). If the variable \emph{l} is a numerical variable,
+#' \deqn{s_{ijl} = 1- \frac{|x_{il} - x_{jl}|}{R_l}}
+#' \eqn{s_{ijl} \in} \{0, 1\}, if the variable \emph{l} is a binary/
+#' categorical variable.
+#'
+#' \code{wishart}
+#'
+#' Wishart (2003) has proposed a different measure compared to Gower (1971) in
+#' the numerical variable part. Instead of a range, it applies a variance of
+#' the numerical variable in the \eqn{s_{ijl}} such that the distance becomes
+#' \deqn{d_{ij} = \sqrt{\sum_{l=1}^p \omega_{ijl} \left(\frac{x_{il} - x_{jl}}
+#' {\delta_{ijl}}\right)^2}}
+#' where \eqn{\delta_{ijl} = s_l} when \emph{l} is a numerical variable and
+#' \eqn{\delta_{ijl} \in} \{0, 1\} when \emph{l} is a binary/ categorical
+#' variable.
+#'
+#' \code{podani}
+#'
+#' Podani (1999) has suggested a different method to compute a distance for
+#' a mixed variable data set. The Podani distance is calculated by
+#' \deqn{d_{ij} = \sqrt{\sum_{l=1}^p \omega_{ijl} \left(\frac{x_{il} - x_{jl}}
+#' {\delta_{ijl}}\right)^2}}
+#' where \eqn{\delta_{ijl} = R_l} when \emph{l} is a numerical variable and
+#' \eqn{\delta_{ijl} \in} \{0, 1\} when \emph{l} is a binary/ categorical
+#' variable.
+#'
+#' \code{huang}
+#'
+#' The Huang (1997) distance between objects \emph{i} and \emph{j} is computed
+#' by
+#' \deqn{ d_{ij} = \sum_{r=1}^{P_n} (x_{ir} - x_{jr})^2 + \gamma
+#' \sum_{s=1}^{P_c} \delta_c (x_{is} - x_{js})}
+#' where \eqn{P_n} and \eqn{P_c} are the number of numerical and categorical
+#' variables, respectively,
+#' \deqn{\gamma = \frac{\sum_{r=1}^{P_n} s_{r}^2}{P_n} }
+#' and \eqn{\delta_c(x_{is} - x_{js})} is the mismatch/ simple matching distance
+#' (\emph{see} \code{\link{matching}}) between object \emph{i} and object
+#' \emph{j} in the variable \emph{s}.
+#'
+#' \code{harikumar}
+#'
+#' Harikumar-PV (2015) has proposed a distance for a mixed variable data set:
+#' \deqn{ d_{ij} = \sum_{r=1}^{P_n} |x_{ir} - x_{jr}| + \sum_{s=1}^{P_c}
+#' \delta_c (x_{is} - x_{js}) + \sum_{t=1}^{p_b} \delta_b (x_{it}, x_{jt})}
+#' where \eqn{P_b} is the number of binary variables,
+#' \eqn{\delta_c (x_{is}, x_{js})} is the co-occurrence distance (\emph{see}
+#' \code{\link{cooccur}}), and \eqn{\delta_b (x_{it}, x_{jt})} is the
+#' Hamming distance.
+#'
+#' \code{ahmad}
+#'
+#' Ahmad and Dey (2007) has computed a distance of a mixed variable set via
+#' \deqn{ d_{ij} = \sum_{r=1}^{P_n} (x_{ir} - x_{jr})^2 +
+#' \sum_{s=1}^{P_c} \delta_c (x_{is} - x_{js})}
+#' where \eqn{\delta_c (x_{it}, x_{jt})} are the co-occurrence distance
+#' (\emph{see} \code{\link{cooccur}}). In the Ahmad and Dey distance,
+#' the binary and categorical variables are not separable such that
+#' the co-occurrence distance is based on the combined these two classes,
+#' i.e. binary and categorical variables.
+#'
+#' At leas two arguments of the \code{idnum}, \code{idbin}, and
+#' \code{idcat} have to be provided because this function calculates
+#' the mixed distance. If the \code{method} is \code{harikumar},
+#' the categorical variables have to be at least two variables such
+#' that the co-occurrence distance can be computed. It also applies when
+#' \code{method = "ahmad"}. The \code{idbin} + \code{idcat} has to
+#' be more than 1 column. It returns to an \code{Error} message otherwise.
+#'
+#' @return Function returns a distance matrix (\emph{n x n}).
 #'
 #' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 #'
-#' @references Ahmad, A., and Dey, L. 2007. A K-mean clustering algorithm for mixed numeric
-#' and categorical data. Data and Knowledge Engineering 63, 503-527.
-#' @references Gower, J., 1971. A general coefficient of similarity and some of its properties.
-#' Biometrics 27, 857-871
-#' @references Harikumar, S., PV, S., 2015. K-medoid clustering for heterogeneous data sets.
-#' JProcedia Computer Science 70, 226-237.
-#' @references Huang, Z., 1997. Clustering large data sets with mixed numeric and categorical
-#' values, in: The First Pacific-Asia Conference on Knowledge Discovery and
-#' Data Mining, pp. 21-34.
-#' @references Podani, J., 1999. Extending gower's general coefficient of similarity to ordinal
-#' characters. Taxon 48, 331-340.
-#' @references Wishart, D., 2003. K-means clustering with outlier detection, mixed variables
-#' and missing values, in: Exploratory Data Analysis in Empirical Research:
-#' Proceedings of the 25th Annual Conference of the Gesellschaft fur Klassifikation e.V.,
-#' University of Munich, March 14-16, 2001, Springer Berlin Heidelberg, Berlin,
-#' Heidelberg. pp. 216-226.
+#' @references Ahmad, A., and Dey, L. 2007. A K-mean clustering algorithm for
+#' mixed numeric and categorical data. Data and Knowledge Engineering 63,
+#' pp. 503-527.
+#' @references Gower, J., 1971. A general coefficient of similarity and some
+#' of its properties. Biometrics 27, pp. 857-871
+#' @references Harikumar, S., PV, S., 2015. K-medoid clustering for
+#' heterogeneous data sets. JProcedia Computer Science 70, pp. 226-237.
+#' @references Huang, Z., 1997. Clustering large data sets with mixed numeric
+#' and categorical values, in: The First Pacific-Asia Conference on Knowledge
+#' Discovery and Data Mining, pp. 21-34.
+#' @references Podani, J., 1999. Extending gower's general coefficient of
+#' similarity to ordinal characters. Taxon 48, pp. 331-340.
+#' @references Wishart, D., 2003. K-means clustering with outlier detection,
+#' mixed variables and missing values, in: Exploratory Data Analysis in
+#' Empirical Research: Proceedings of the 25th Annual Conference of the
+#' Gesellschaft fur Klassifikation e.V., University of Munich, March 14-16,
+#' 2001, Springer Berlin Heidelberg, Berlin, Heidelberg. pp. 216-226.
 #'
 #' @importFrom stats dist
 #' @importFrom stats sd
@@ -50,6 +130,7 @@
 #' distmix(mixdata, method = "gower", idnum = 1:3, idbin = 4:6, idcat = 7:9)
 #'
 #' @export
+
 distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = NULL) {
 
   if(any(is.na(data))) stop("Cannot handle missing values!")
@@ -66,6 +147,13 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
   dist_num4 <- c("gower", "wishart", "podani","huang", "harikumar", "ahmad")
   method <- match.arg(method, dist_num4)
 
+  if ((length(c(idbin,idcat)) == 1) & method == "ahmad")
+    stop("Ahmad-Dey distance can not be calculated
+         because the combined binary and categorical variable is only 1 variable!")
+  if (length(idcat) == 1 & method == "harikumar")
+    stop("Harikumar-PV distance can not be calculated
+         because the categorical variable is only 1 variable!")
+
   if(is.null(idnum)) {
     num <- 0
     msd <- 0
@@ -75,12 +163,12 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
     msd <- mean(apply(data[, idnum, drop = FALSE], 2, sd))
     x <- as.matrix(data[,idnum, drop=FALSE])
     dist_numeric <- switch(method,
-        gower = distNumeric(x, x, method = "mrw"),
-        wishart = distNumeric(x, x, method = "sev"),
-        podani = distNumeric(x, x, method = "ser"),
-        huang = distNumeric(x, x, method = "se"),
-        harikumar = as.matrix(dist(x, method = "manhattan")),
-        ahmad = distNumeric(x, x, method = "se"))
+                           gower = distNumeric(x, x, method = "mrw"),
+                           wishart = distNumeric(x, x, method = "sev"),
+                           podani = distNumeric(x, x, method = "ser.2"),
+                           huang = distNumeric(x, x, method = "se"),
+                           harikumar = as.matrix(dist(x, method = "manhattan")),
+                           ahmad = distNumeric(x, x, method = "se"))
   }
 
   if(is.null(idbin)) {
@@ -90,9 +178,9 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
     bin <- length(idbin)
     dist_matchbin <- matching(data[,idbin, drop=FALSE], data[,idbin, drop=FALSE])
     if (method == "ahmad") {
-      dist_binary <- cooccur(data[,idbin, drop=FALSE])
+      dist_binary <- cooccur(data[,c(idbin, idcat),drop=FALSE])
     } else {
-      if (method == "harikumar") {
+      if (method == "huang" | method == "harikumar") {
         dist_binary <- dist_matchbin*bin
       } else {
         dist_binary <- dist_matchbin
@@ -106,23 +194,30 @@ distmix <- function(data, method = "gower", idnum = NULL, idbin = NULL, idcat = 
   } else {
     cat <- length(idcat)
     dist_matchcat <- matching(data[,idcat, drop=FALSE], data[,idcat, drop=FALSE])
-    if (method == "harikumar" | method == "ahmad") {
+    if (method == "harikumar") {
       dist_cat <- cooccur(data[,idcat, drop=FALSE])
     } else {
-      dist_cat <- dist_matchcat
+      if (method == "huang") {
+        dist_cat <- dist_matchcat*cat
+      } else {
+        if (method == "ahmad") {
+          dist_cat <- dist_binary
+        } else {
+          dist_cat <- dist_matchcat
+        }
+      }
     }
   }
 
   nvar <- num + bin + cat
   dist_mix <- switch(method,
-      gower = dist_numeric*1/nvar + dist_binary*bin/nvar + dist_cat*cat/nvar,
-      wishart = dist_numeric*1/nvar + dist_binary*bin/nvar + dist_cat*cat/nvar,
-      podani = (dist_numeric + dist_binary*bin + dist_cat*cat)^0.5,
-      huang = dist_numeric + dist_binary*msd + dist_cat*msd,
-      harikumar = dist_numeric + dist_binary + dist_cat,
-      ahmad = dist_numeric + (dist_binary + dist_cat)^2)
+                     gower = dist_numeric*1/nvar + dist_binary*bin/nvar + dist_cat*cat/nvar,
+                     wishart = (dist_numeric*1/nvar + dist_binary*bin/nvar + dist_cat*cat/nvar)^0.5,
+                     podani = (dist_numeric + dist_binary*bin + dist_cat*cat)^0.5,
+                     huang = dist_numeric + dist_binary*msd + dist_cat*msd,
+                     harikumar = dist_numeric + dist_binary + dist_cat,
+                     ahmad = dist_numeric + (dist_binary)^2)
 
   return(dist_mix)
 
 }
-

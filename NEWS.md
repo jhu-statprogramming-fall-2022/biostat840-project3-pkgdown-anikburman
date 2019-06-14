@@ -1,3 +1,27 @@
+# kmed 0.3.0
+
+* Added clust5 data set.
+* Added csv.
+* Added heart data set.
+* Added inckmed.
+* Added sil.
+* Fixed barplotnum.
+* Fixed clustboot.
+* Fixed clustheatmap.
+* Fixed consensusmatrix.
+* Fixed cooccur.
+* Fixed distmix.
+* Fixed distNumeric.
+* Fixed fastkmed.
+* Fixed pcabiplot.
+* Fixed rankkmed.
+* Deprecated shadow.
+* Deprecated silhoutte.
+* Deprecated stepkmed.
+* Edited `NEWS.md`.
+* More detail vignette.
+* More detail reference manual.
+
 # kmed 0.2.0
 
 * Added barplotnum to make a barplot of numerical data set.

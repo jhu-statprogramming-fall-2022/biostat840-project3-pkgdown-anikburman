@@ -2,31 +2,54 @@
 % Please edit documentation in R/fastkmed.R
 \name{fastkmed}
 \alias{fastkmed}
-\title{Simple and fast k-medoid algorithm from Park and Jun.}
+\title{Simple and fast k-medoid algorithm}
 \usage{
 fastkmed(distdata, ncluster, iterate = 10, init = NULL)
 }
 \arguments{
-\item{distdata}{A matrix of distance objects (n x n) or a diss class.}
+\item{distdata}{A distance matrix (\emph{n x n}) or \emph{dist} object.}
 
-\item{ncluster}{A number of cluster.}
+\item{ncluster}{A number of clusters.}
 
-\item{iterate}{A number of iteration for clustering algorithm.}
+\item{iterate}{A number of iterations for the clustering algorithm.}
 
-\item{init}{An index of the initial medoids.}
+\item{init}{A vector of initial objects as the cluster medoids
+(\emph{see} \strong{Details}).}
 }
 \value{
-Function returns a partitioning clustering algorithm result consists of cluster
-membership, cluster medoid, the minimum distance to the cluster medoid.
+Function returns a list of components:
+
+\code{cluster} is the clustering memberships result.
+
+\code{medoid} is the id medoids.
+
+\code{minimum_distance} is the distance of all objects to their cluster
+medoid.
 }
 \description{
-This function computes and returns the clustering result
-computed by using a specified distance via Park and Jun's algorithm.
+This function runs the simple and fast k-meoid algorithm
+proposed by Park and Jun (2009).
 }
 \details{
-This is a k-medoids algorithm that has been proposed by Park and Jun. The algorihm
-has been claimed to be fast and simple. The medoids updating in this algorihm is similar to
-kmeans centroid updating.
+The simple and fast k-medoids, which sets a set of medoids as the
+cluster centers, adapts the k-means algorithm for medoid up-dating.
+The new medoids of each iteration are calculated in the within cluster
+only such that it gains speed.
+
+\code{init = NULL} is required because the Park and Jun (2009) has
+a particular method to select the initial medoids.  The initial medoids
+are selected by
+\deqn{ v_j = \sum_{i=1}^n \frac{d_{ij}}{\sum_{l=1}^n d_{il}},
+\quad j = 1, 2, 3, \ldots, n }
+where the first \emph{k} of the \eqn{v_j} is selected if the number of
+clusters is \emph{k}.
+
+\code{init} can be provided with a vector of id objects. The length of
+the vector has to be equal to the number of clusters. However, assigning
+a vector in the \code{init} argument, the algorithm is no longer the simple
+and fast k-medoids algorithm. The \code{\link{inckmed}} function,
+for example, defines a different method to select the initial medoid
+though it applies the \code{\link{fastkmed}} function.
 }
 \examples{
 num <- as.matrix(iris[,1:4])
@@ -37,8 +60,8 @@ table(result$cluster, iris[,5])
 
 }
 \references{
-Park, H., Jun, C., 2009. A simple and fast algorithm for k-medoids clustering.
-Expert Systems with Applications 36, 3336-3341.
+Park, H., Jun, C., 2009. A simple and fast algorithm for
+k-medoids clustering. Expert Systems with Applications 36, pp. 3336-3341.
 }
 \author{
 Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}

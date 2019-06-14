@@ -7,37 +7,51 @@
 clustheatmap(consmat, title = "")
 }
 \arguments{
-\item{consmat}{A matrix of consensus matrix.}
+\item{consmat}{A matrix of consensus/ agreement matrix (\emph{see}
+\strong{Details}).}
 
-\item{title}{A character of plot title}
+\item{title}{A title of the plot.}
 }
 \value{
 Function returns a heatmap plot.
 }
 \description{
-This function create a consensus matrix heatmap from a consensus
-matrix.
+This function creates a consensus matrix heatmap from a
+consensus/ agreement matrix. The values of the consensus/ agreement
+matrix are transformed in order to plot the heatmap.
 }
 \details{
-This is a function to produce a consensus matrix heatmap from a consensus
-matrix.
+This is a function to produce a consensus matrix heatmap from a
+consensus/ agreement matrix. A matrix produced by the
+\code{\link{consensusmatrix}} function can be directly provided in the
+\code{consmat} argument. The values of the consensus matrix, \strong{A},
+are then transformed via a non-linear transformation by applying
+\deqn{a_{ij}^{trf} = \frac{a_{ij} - min(a_{..})}{max(a_{..}) - min(a_{..})}}
+where \eqn{a_{ij}} is the value of the consensus matrix in row \emph{i} and
+column \emph{j}, and \eqn{a_{..}} is the all values of the matrix
+(\eqn{\forall}\strong{A}).
 }
 \examples{
 num <- as.matrix(iris[,1:4])
 mrwdist <- distNumeric(num, num, method = "mrw")
-parkboot <- function(x, nclust) {
-res <- fastkmed(x, nclust, iterate = 50)
-return(res$cluster)
-}
-irisboot <- clustboot(mrwdist, nclust=3, parkboot, nboot=7)
-wardorder <- function(x, nclust) {
-res <- hclust(x, method = "ward.D2")
+irisfast <- clustboot(mrwdist, nclust=3, nboot=7)
+complete <- function(x, nclust) {
+res <- hclust(as.dist(x), method = "complete")
 member <- cutree(res, nclust)
 return(member)
 }
-consensusiris <- consensusmatrix(irisboot, nclust = 3, wardorder)
-clustheatmap(consensusiris)
+consensuscomplete <- consensusmatrix(irisfast, nclust = 3, reorder = complete)
+clustheatmap(consensuscomplete)
 
+}
+\references{
+Monti, S., P. Tamayo, J. Mesirov, and T. Golub. 2003. Consensus
+clustering: A resampling-based method for class discovery and visualization
+of gene expression microarray data. Machine Learning 52 pp. 91-118.
+
+Hahsler, M., and Hornik, K., 2011. Dissimilarity plots:
+A visual exploration tool for partitional clustering. Journal of
+Computational and Graphical Statistics 20(2) pp. 335-354.
 }
 \author{
 Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}

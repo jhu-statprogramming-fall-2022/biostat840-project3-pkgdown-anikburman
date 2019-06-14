@@ -112,3 +112,7 @@ plotsil <- function(ord, tit = "") {
           plot.title = element_text(face="bold", size=16, hjust=0.5)
     )
 }
+fastclust <- function(x, nclust) {
+  res <- fastkmed(x, nclust, iterate = 50)
+  return(res$cluster)
+}

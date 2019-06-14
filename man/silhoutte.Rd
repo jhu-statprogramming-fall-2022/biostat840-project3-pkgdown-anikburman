@@ -2,7 +2,7 @@
 % Please edit documentation in R/silhoutte.R
 \name{silhoutte}
 \alias{silhoutte}
-\title{Silhoutte index of each cluster.}
+\title{Silhoutte index of each cluster}
 \usage{
 silhoutte(distdata, idmedoid, idcluster)
 }
@@ -13,31 +13,7 @@ silhoutte(distdata, idmedoid, idcluster)
 
 \item{idcluster}{A vector of cluster membership.}
 }
-\value{
-Function returns a silhoutte index and plot.
-}
 \description{
-This function create a silhoutte index and its plot.
-}
-\details{
-This is a function to produce a silhoutte index and its plot
-for each cluster. The id medoids must match with the cluster
-membership, for example, if the id medoids are 2, 25, and 57 (3 medoids),
-the idcluster must have 3 unique memberships.
-}
-\examples{
-distiris <- as.matrix(dist(iris[,1:4]))
-res <- fastkmed(distiris, 3)
-silh <- silhoutte(distiris, res$medoid, res$cluster)
-silh$result[c(1:3,70:75,101:103),]
-silh$plot
-
-}
-\references{
-P. J. Rousseeuw. 1987 Silhouettes: a graphical aid to
-the interpretation and validation of cluster analysis.
-Journal of Computational and Applied Mathematics, vol. 20, pp. 53-65
-}
-\author{
-Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
+This function is deprecated, use the \code{\link{sil}}
+function instead.
 }

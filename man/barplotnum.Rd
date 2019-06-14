@@ -2,25 +2,41 @@
 % Please edit documentation in R/barplotnum.R
 \name{barplotnum}
 \alias{barplotnum}
-\title{Barplot of each cluster for numerical variables data set.}
+\title{Barplot of each cluster for numerical variables data set}
 \usage{
-barplotnum(dataori, clust, nc = 1)
+barplotnum(dataori, clust, nc = 1, alpha = 0.05)
 }
 \arguments{
 \item{dataori}{An original data set.}
 
-\item{clust}{A vector of cluster membership.}
+\item{clust}{A vector of cluster membership (see \strong{Details}).}
 
-\item{nc}{A number of column of the plot.}
+\item{nc}{A number of columns for the plot of all cluster
+(see \strong{Details}).}
+
+\item{alpha}{A numeric number to set the significant level (between 0 and 0.2).}
 }
 \value{
 Function returns a barplot.
 }
 \description{
-This function create a barplot from a cluster result.
+This function creates a barplot from a cluster result. A barplot
+indicates the location and dispersion of each cluster. The x-axis
+of the barplot is variable's mean, while the y-axis is the variable's name.
 }
 \details{
-This is a function to produce a barplot for each cluster.
+This is a marked barplot because some markers are added, i.e.
+a significant test, a population mean for each (numerical) variable.
+The significance test applies t-test between the population's mean and
+cluster's mean in every variable. The alpha is set in between 0 to 20\%.
+If the population mean differs to the cluster's mean, the bar shade in the
+barplot also differs.
+
+\code{clust} is a vector with the length equal to the number of objects
+(\emph{n}), or the function will be an \emph{error} otherwise. \code{nc}
+controls the layout (grid) of the plot. If \code{nc = 1}, the plot of each
+cluster is placed in a column. When the number of clusters is 6 and
+\code{nc = 2}, for example, the plot has a layout of 3-row and 2-column grids.
 }
 \examples{
 dat <- iris[,1:4]
@@ -28,6 +44,15 @@ memb <- cutree(hclust(dist(dat)),3)
 barplotnum(dat, memb)
 barplotnum(dat, memb, 2)
 
+}
+\references{
+Leisch, F. (2008). Handbook of Data Visualization, Chapter
+Visualizing cluster analysis and finite mixture models, pp. 561-587.
+Springer Handbooks of Computational Statistics. Springer Verlag.
+
+Dolnicar, S. and F. Leisch (2014). Using graphical statistics to
+better understand market segmentation solutions. International Journal of
+Market Research 56, 207-230.
 }
 \author{
 Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}

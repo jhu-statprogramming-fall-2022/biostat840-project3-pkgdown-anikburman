@@ -2,44 +2,93 @@
 % Please edit documentation in R/consensusmatrix.R
 \name{consensusmatrix}
 \alias{consensusmatrix}
-\title{Consensus matrix from A bootstrap replicate matrix}
+\title{Consensus matrix from A matrix of bootstrap replicates}
 \usage{
-consensusmatrix(bootdata, nclust, reorder)
+consensusmatrix(bootdata, nclust, reorder = fastclust)
 }
 \arguments{
-\item{bootdata}{A matrix of bootstrap replicate (n x b) membership.}
+\item{bootdata}{A matrix of bootstrap replicate (\emph{n x b})
+(\emph{see} \strong{Details}).}
 
-\item{nclust}{The number of clusters}
+\item{nclust}{A number of clusters.}
 
-\item{reorder}{Any clustering algorithm function with the input is a distance and the end result being only membership.}
+\item{reorder}{Any distance-based clustering algorithm function
+(\emph{see} \strong{Details}).}
 }
 \value{
-Function returns a consensus matrix (n x n).
+Function returns a consensus/ agreement matrix of \emph{n x n}
+dimension.
 }
 \description{
-This function create a consensus matrix from a bootstrap
-replicate matrix.
+This function creates a consensus matrix from a matrix of
+bootstrap replicates. It transforms an \emph{n x b} matrix into an
+\emph{n x n} matrix, where \emph{n} is the number of objects and \emph{b}
+is the number of bootstrap replicates.
 }
 \details{
-This is a function to obtain a consensus matrix from a bootstrap
-evaluation for a cluster. The consensus matrix can be further plotted.
+This is a function to obtain a consensus matrix from a matrix of
+bootstrap replicates to evaluate the clustering result. The
+\code{bootdata} argument can be supplied directly from a matrix produced
+by the \code{\link{clustboot}} function. The values of the consensus matrix,
+\strong{A}, are calculated by
+\deqn{a_{ij} = a_{ji} = \frac{\#n \:of \:objects \:\emph{i} \:and \:\emph{j}
+\:in \:the \:same \:cluster}{\#n \:of \:objects \:\emph{i} \:and \:\emph{j}
+\:sampled \:at \:the \:same \:time}}
+where \eqn{a_{ij}} is the agreement index between objects \emph{i} and
+\emph{j}. Note that due to the agreement between objects \emph{i} and
+\emph{j} equal to the agreement between objects \emph{j} and \emph{i},
+the consensus matrix is a symmetric matrix.
+
+Meanwhile, the \code{reorder} argument is a function to reorder the objects
+in both the row and column of the consensus matrix such that similar objects
+are close to each other. This task can be solved by applying a clustering
+algorithm in the consensus matrix. The \code{reorder} has to consist of
+two input arguments. The two input arguments are a
+\emph{distance matrix/ object} and \emph{number of clusters}.
+The output is only a \emph{vector of cluster memberships}. Thus,
+the algorihtm that can be applied in the \code{reorder} argument is the
+distance-based algorithm with a distance as the input.
+
+The default \code{reorder} is \code{fastclust} applying the
+\code{\link{fastkmed}} function. The code of the \code{fastclust} is
+
+fastclust <- function(x, nclust) \{
+
+res <- fastkmed(x, nclust, iterate = 50)
+
+return(res$cluster)
+
+\}
+
+For other examples, \emph{see} \strong{Examples}. It applies centroid and
+complete linkage algorithms.
 }
 \examples{
 num <- as.matrix(iris[,1:4])
 mrwdist <- distNumeric(num, num, method = "mrw")
-parkboot <- function(x, nclust) {
-res <- fastkmed(x, nclust, iterate = 50)
-return(res$cluster)
-}
-irisboot <- clustboot(mrwdist, nclust=3, parkboot, nboot=7)
-wardorder <- function(x, nclust) {
-res <- hclust(x, method = "ward.D2")
+irisfast <- clustboot(mrwdist, nclust=3, nboot=7)
+consensusfast <- consensusmatrix(irisfast, nclust = 3)
+centroid <- function(x, nclust) {
+res <- hclust(as.dist(x), method = "centroid")
 member <- cutree(res, nclust)
 return(member)
 }
-consensusiris <- consensusmatrix(irisboot, nclust = 3, wardorder)
-consensusiris[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
+consensuscentroid <- consensusmatrix(irisfast, nclust = 3, reorder = centroid)
+complete <- function(x, nclust) {
+res <- hclust(as.dist(x), method = "complete")
+member <- cutree(res, nclust)
+return(member)
+}
+consensuscomplete <- consensusmatrix(irisfast, nclust = 3, reorder = complete)
+consensusfast[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
+consensuscentroid[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
+consensuscomplete[c(1:5,51:55,101:105),c(1:5,51:55,101:105)]
 
+}
+\references{
+Monti, S., P. Tamayo, J. Mesirov, and T. Golub. 2003. Consensus
+clustering: A resampling-based method for class discovery and visualization
+of gene expression microarray data. Machine Learning 52 pp. 91-118.
 }
 \author{
 Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}

@@ -2,33 +2,51 @@
 % Please edit documentation in R/rankkmed.R
 \name{rankkmed}
 \alias{rankkmed}
-\title{Rank k-medoid algorithm from Zadegan et. al.}
+\title{Rank k-medoid algorithm}
 \usage{
-rankkmed(distdata, ncluster, m = 3, iterate = 10, initial = NULL)
+rankkmed(distdata, ncluster, m = 3, iterate = 10, init = NULL)
 }
 \arguments{
-\item{distdata}{A matrix of distance objects (n x n) or a diss class.}
+\item{distdata}{A distance matrix (\emph{n x n}) or \emph{dist} object.}
 
-\item{ncluster}{A number of cluster.}
+\item{ncluster}{A number of clusters.}
 
-\item{m}{A number of objects to compute hostility.}
+\item{m}{A number of objects to compute hostility (\emph{see}
+\strong{Details}).}
 
-\item{iterate}{A number of iteration for clustering algorithm.}
+\item{iterate}{A number of iterations for the clustering algorithm.}
 
-\item{initial}{A vector of initial objects as the cluster medoids.}
+\item{init}{A vector of initial objects as the cluster medoids
+(\emph{see} \strong{Details}).}
 }
 \value{
-Function returns a partitioning clustering algorithm result consists of cluster
-membership, cluster medoid, the minimum distance to the cluster medoid.
+Function returns a list of components:
+
+\code{cluster} is the clustering memberships result.
+
+\code{medoid} is the id medoids.
+
+\code{minimum_distance} is the distance of all objects to their cluster
+medoid.
 }
 \description{
-This function computes and returns the clustering result
-computed by using a specified distance via rank k-medoids algorithm.
+This function runs the rank k-medoids algorithm proposed by
+Zadegan et. al. (2013).
 }
 \details{
-This is a k-medoids algorithm that has been proposed by Zadegan et. al. The algorihm
-has been claimed to be suitable for large dataset. The medoids updating in this algorihm is
-similar to kmeans centroid updating.
+This algorithm is claimed to cope with the local optima problem
+of the simple and fast-kmedoids algorithm (\code{\link{fastkmed}}). The
+\code{m} argument is defined by the user and has to be \eqn{1 < m \leq n}.
+The \code{m} is a hostility measure computed by
+\deqn{m_i = \sum_{X_j \in Y} r_{ij}}
+where \eqn{x_j} is the object \emph{j}, \emph{Y} is the set of objects
+as many as \emph{m}, and \eqn{r_{ij}} is the rank distance, i.e. sorted
+distance, between object \emph{i} and \emph{j}.
+
+\code{init} can be provided with a vector of id objects. The length of
+the vector has to be equal to the number of clusters. However, assigning
+a vector in the \code{init} argument, the algorithm is no longer the rank
+k-medoids algorithm.
 }
 \examples{
 num <- as.matrix(iris[,1:4])
