@@ -68,7 +68,66 @@ inckmed <- function(distdata, ncluster, iterate = 10, alpha = 1) {
 
   if(is.null(rownames(distdata))==TRUE) rownames(distdata) <- 1:nrow(distdata)
 
-  medinit <- stepinit(distdata, ncluster, alpha = alpha)
+  n <- nrow(distdata)
+
+  if (ncluster > n)
+    stop ("The number of cluster is bigger than the number of objects, reduce it!")
+  index <- 1:n
+
+  sorted_object <- order(unique(colSums(distdata/sum(distdata))))
+  o1 <- sorted_object[1]
+
+  if (ncluster == 1) {
+    medinit <- fastkmed(distdata, ncluster, init =o1)$medoid
+  }
+
+  sigma <- sum(distdata[,o1]-distdata[o1,o1])/(n-1)
+  sigmai <- apply(distdata, 1, function (x) sum(x)/(n-1))
+  sm <- index[sigmai <= sigma*1.1]
+  distsm <- distdata[sm,o1,drop=FALSE]
+  o2 <- sm[which.max(distsm)]
+
+  med1 <- c(o1, o2)
+  med1uni <- unique(med1)
+  if (length(med1uni) != 2)
+    stop ("Increase the value of alpha!")
+
+  if (ncluster == 2) {
+    medinit <- fastkmed(distdata, ncluster, init =med1)$medoid
+  }
+
+  if (ncluster > 2) {
+
+    ncluster1 <- 2
+    medinit <- fastkmed(distdata, ncluster1, init = med1)$medoid
+
+    repeat{
+      omed <- length(medinit)
+      sigmatemp <- numeric(omed)
+      smtemp <- distsm <- vector("list", omed)
+      for (i in 1:omed) {
+        sigmatemp[i] <- sum(distdata[,medinit[i]]-
+                              distdata[medinit[i],medinit[i]])/(n-1)
+        smtemp[[i]] <- index[sigmai <= sigmatemp[i]*1.1]
+        for (l in 1:omed) {
+          medidx <- smtemp[[i]][smtemp[[i]]!=medinit[l]]
+          smtemp[[i]] <- medidx
+        }
+        distsm[[i]] <- distdata[smtemp[[i]],medinit[i],drop=FALSE]
+      }
+      iddistmax <- which.max(unlist(distsm))
+      oi <- unlist(smtemp)[iddistmax]
+      med2 <- c(medinit,oi)
+      medinit <- fastkmed(distdata, length(med2), init =med2)$medoid
+      if (ncluster1 == ncluster) {
+        break
+      }
+      med1 <- med2
+      ncluster1 <- ncluster1 + 1
+    }
+    medinit <- med1
+  }
+
   result <- fastkmed(distdata, ncluster, iterate = iterate, init = medinit)
 
   return(result)

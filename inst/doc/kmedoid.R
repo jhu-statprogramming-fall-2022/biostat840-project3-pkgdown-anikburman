@@ -251,6 +251,16 @@ set.seed(1)
 (9+3)/sum(inckmtable)
 
 ## ------------------------------------------------------------------------
+#run the sfkm algorihtm on iris data set with mrw distance
+(simplekm <- skm(mrwdist, ncluster = 3, seeding = 50))
+
+## ------------------------------------------------------------------------
+(simpletable <- table(simplekm$cluster, iris[,5]))
+
+## ------------------------------------------------------------------------
+(4+11)/sum(simpletable)
+
+## ------------------------------------------------------------------------
 #calculate silhouette of the RKM result of iris data set 
 siliris <- sil(mrwdist, rkm$medoid, rkm$cluster, 
                      title = "Silhouette plot of Iris data set via RKM")
@@ -263,9 +273,9 @@ siliris$result[c(49:52),]
 siliris$plot
 
 ## ------------------------------------------------------------------------
-#calculate shadow value of the RKM result of iris data set 
+#calculate centroid-base shadow value of the RKM result of iris data set 
 csviris <- csv(mrwdist, rkm$medoid, rkm$cluster, 
-                     title = "Shadow value plot of Iris data set via RKM")
+                     title = "CSV plot of Iris data set via RKM")
 
 ## ------------------------------------------------------------------------
 #shadow values of objects 49 to 52
@@ -273,6 +283,18 @@ csviris$result[c(49:52),]
 
 ## ---- fig.width=7, fig.asp=0.8-------------------------------------------
 csviris$plot
+
+## ------------------------------------------------------------------------
+#calculate medoid-based shadow value of the RKM result of iris data set 
+msviris <- msv(mrwdist, rkm$medoid, rkm$cluster, 
+                     title = "MSV plot of Iris data set via RKM")
+
+## ------------------------------------------------------------------------
+#Medoid-based shadow values of objects 49 to 52
+msviris$result[c(49:52),]
+
+## ---- fig.width=7, fig.asp=0.8-------------------------------------------
+msviris$plot
 
 ## ------------------------------------------------------------------------
 #The RKM function for an argument input

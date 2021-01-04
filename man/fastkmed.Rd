@@ -27,7 +27,7 @@ Function returns a list of components:
 medoid.
 }
 \description{
-This function runs the simple and fast k-meoid algorithm
+This function runs the simple and fast k-medoid algorithm
 proposed by Park and Jun (2009).
 }
 \details{

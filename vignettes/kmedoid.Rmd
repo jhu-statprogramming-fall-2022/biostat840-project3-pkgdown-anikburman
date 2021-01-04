@@ -33,6 +33,38 @@ references:
   issued:
     year: 2007
     month: 11
+- id: budiaji1
+  title: Simple K-Medoids Partitioning Algorithm for Mixed Variable Data
+  author:
+  - family: Budiaji
+    given: W. 
+  - family: Leisch
+    given: F.   
+  container-title: Algorithms 
+  volume: 12
+  URL: 'https://www.mdpi.com/1999-4893/12/9/177'
+  DOI: 10.3390/a12090177
+  publisher:  MDPI
+  page: 177
+  type: article-journal
+  issued:
+    year: 2019
+    month: 08
+- id: budiaji2
+  title: Medoid-based shadow value validation and visualization
+  author:
+  - family: Budiaji
+    given: W. 
+  container-title: International Journal of Advances in Intelligent Informatics
+  volume: 5
+  URL: 'https://ijain.org/index.php/IJAIN/article/view/326'
+  DOI: 10.26555/ijain.v5i2.326
+  publisher: Universitas Ahmad Dahlan
+  page: 76-88
+  type: article-journal
+  issued:
+    year: 2019
+    month: 07
 - id: dolnicar
   title: Evaluation of structure and reproducibility of cluster solutions using the bootstrap
   author:
@@ -329,10 +361,12 @@ The [**kmed**](https://cran.r-project.org/package=kmed) package is designed to a
     + [K-medoids](#km)
     + [Rank k-medoids](#rkm)
     + [Increasing number of clusters k-medoids](#inckm)
+    + [simple k-medoids](#skm)
 * cluster validations:
     + internal criteria:
         - [Silhouette](#sil)
         - [Centroid-based shadow value](#csv)
+        - [Medoid-based shadow value](#msv)
     + [relative criteria (bootstrap)](#boot) 
 * Cluster visualizations:
     + [pca biplot](#biplot)
@@ -851,6 +885,29 @@ The algorithm has `8`\% misclassification rate such that the [RKM](#rkm) algorit
 
 [(Back to Intoduction)](#intro)
 
+### 3.E. Simple k-medoids algorithm (`skm`) {#skm}
+
+The simple k-medoid (SKM) algorithm has been proposed by @budiaji1. The `skm` function runs this algorithm to cluster the objects. The compulsory inputs are a distance matrix or distance object and a number of clusters. Hence, the SKM algorithm for the `iris` data set is
+    
+```{r}
+#run the sfkm algorihtm on iris data set with mrw distance
+(simplekm <- skm(mrwdist, ncluster = 3, seeding = 50))
+```
+
+Then, a classification table can be obtained.
+
+```{r}
+(simpletable <- table(simplekm$cluster, iris[,5]))
+```
+
+Applying the SKM algorithm in `iris` data set with the Manhattan weighted by range, the misclassification rate is
+
+```{r}
+(4+11)/sum(simpletable)
+```
+
+[(Back to Intoduction)](#intro)
+
 ## 4. Cluster validation
 
 The clustering algorithm result has to be validated. There are two types of validation implemented in the [**kmed**](https://cran.r-project.org/package=kmed) package. They are internal and relative criteria validations.
@@ -886,27 +943,54 @@ siliris$plot
 
 ### 4.A.2. Centroid-based shadow value (`csv`) {#csv}
 
-An other way to measure internal validation with its corresponding plot is by presenting the centroid-based shadow value [@leisch]. The `csv` function calculates and plots the shadow value of each object, which is based on the first and second closest medoids. The centroid of the original version of the csv is replaced by medoids in the `csv` function to adapt the k-medoids algorithm.
+An other way to measure internal validation with its corresponding plot is by presenting the centroid-based shadow value [@leisch]. The `csv` function calculates and plots the centroid-base shadow value of each object, which is based on the first and second closest medoids. The centroid of the original version of the csv is replaced by medoids in the `csv` function to adapt the k-medoids algorithm.
 
 The required arguments in the `csv` function is identical to the [silhouette (`sil`)](#sil) function. Thus, the shadow value and plot of the best clustering result of `iris` data set via [RKM](#rkm) can be obtained by 
 
 ```{r}
-#calculate shadow value of the RKM result of iris data set 
+#calculate centroid-base shadow value of the RKM result of iris data set 
 csviris <- csv(mrwdist, rkm$medoid, rkm$cluster, 
-                     title = "Shadow value plot of Iris data set via RKM")
+                     title = "CSV plot of Iris data set via RKM")
 ```
 
-The shadow values of objects 49 to 52, for instance, are presented by
+The centroid-based shadow values of objects 49 to 52, for instance, are presented by
 
 ```{r}
 #shadow values of objects 49 to 52
 csviris$result[c(49:52),]
 ```
 
-The shadow value plot is also produced.
+The centroid-based shadow value plot is also produced.
 
 ```{r, fig.width=7, fig.asp=0.8}
 csviris$plot
+```
+
+[(Back to Intoduction)](#intro)
+
+### 4.A.3. Medoid-based shadow value (`msv`) {#msv}
+
+An other way to measure internal validation by combining silhoutte and csv properties is by a medoid-based shadow value (msv) [@budiaji2]. The `msv` function calculates and plots the medoid-based shadow value of each object, which is based on the first and second closest medoids. 
+
+The required arguments in the `msv` function is identical to the [centroid-based shadow value (`csv`)](#csv) function. Thus, the medoid-based shadow value and plot of the best clustering result of `iris` data set via [RKM](#rkm) can be obtained by 
+
+```{r}
+#calculate medoid-based shadow value of the RKM result of iris data set 
+msviris <- msv(mrwdist, rkm$medoid, rkm$cluster, 
+                     title = "MSV plot of Iris data set via RKM")
+```
+
+The medoid-based shadow values of objects 49 to 52, for instance, are presented by
+
+```{r}
+#Medoid-based shadow values of objects 49 to 52
+msviris$result[c(49:52),]
+```
+
+The shadow value plot is also produced.
+
+```{r, fig.width=7, fig.asp=0.8}
+msviris$plot
 ```
 
 [(Back to Intoduction)](#intro)

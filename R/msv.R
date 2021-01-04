@@ -1,6 +1,6 @@
-#' Centroid shadow value (CSV) index and plot
+#' Medoid shadow value (MSV) index and plot
 #'
-#' @description This function computes centroid shadow values and shadow value plots of
+#' @description This function computes medoid shadow values and shadow value plots of
 #' each cluster. The plot presents the mean of the shadow values as well.
 #'
 #' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
@@ -8,12 +8,12 @@
 #' @param idcluster A vector of cluster membership (\emph{see} \strong{Details}).
 #' @param title A title of the plot.
 #'
-#' @details The origin of the centroid shadow value is calculated in the \code{shadow}
+#' @details The origin of the shadow value is calculated in the \code{shadow}
 #' function of the \pkg{flexclust} package, in which it is based on the first and
-#' second closest centroid. The \code{csv} function in this package modifies
+#' second closest centroid. The \code{msv} function in this package modifies
 #' the centroid into medoid such that the formula to compute shadow value of
 #' object \emph{i} is
-#' \deqn{csv(i) = \frac{2d(i, m(i))}{d(i, m(i)) + d(i, m'(i))}}
+#' \deqn{msv(i) = \frac{d(i, m'(i))-d(i, m(i))}{d(i, m'(i))}}
 #' where \eqn{d(i, m(i))} is the distance between object \emph{i} to the first
 #' closest medoid and \emph{d(i, m'(i))} is the distance between object
 #' \emph{i} to the second closest medoid.
@@ -22,9 +22,9 @@
 #' If the length of \code{idmedoid} is 3, for example, the \code{idcluster} has
 #' to have 3 unique cluster memberships, or it returns \code{Error} otherwise.
 #' The length of the \code{idcluster} has also to be equal to \emph{n}
-#' (the number of objects). In contrast to the silhoutte value,
-#' the centoird shadow value is interpreted that lower value is the better
-#' cluster separation.
+#' (the number of objects). In contrast to the centroid shadow value,
+#' the medoid shadow value is interpreted likewise a silhoutte value,
+#' the higher value the better separation.
 #'
 #' @return Function returns a list with following components:
 #'
@@ -44,13 +44,13 @@
 #' @examples
 #' distiris <- as.matrix(dist(iris[,1:4]))
 #' res <- fastkmed(distiris, 3)
-#' sha <- csv(distiris, res$medoid, res$cluster)
+#' sha <- msv(distiris, res$medoid, res$cluster)
 #' sha$result[c(1:3,70:75,101:103),]
 #' sha$plot
 #'
 #' @export
 
-csv <- function(distdata, idmedoid, idcluster, title = "") {
+msv <- function(distdata, idmedoid, idcluster, title = "") {
 
   if((is.matrix(distdata)||inherits(distdata, "dist"))==FALSE)
     stop("The distdata must be a matrix or a dist object!")
@@ -76,12 +76,16 @@ csv <- function(distdata, idmedoid, idcluster, title = "") {
     distmedo <- distdata[idcluster==i, idmedoid, drop = FALSE]
     clclose <- apply(distmedo, 1, secondorder)
     dista2 <- diag(distmedo[,clclose, drop = FALSE])
-    shad[[i]] <- 2*dista1/(dista1+dista2)
+    shad[[i]] <- (dista2-dista1)/ dista2
   }
+
   vecsha <- do.call(rbind, shad)
   ord <- order(as.numeric(rownames(vecsha)))
-  result <- data.frame(csv = vecsha[ord], cluster = idcluster)
-  orderesult <- orderindex(result$csv, result$cluster)
+  result <- data.frame(msv = vecsha[ord], cluster = idcluster)
+  orderesult <- orderindex(result$msv, result$cluster)
   plot1 <- plotsil(orderesult, tit = title)
   return(list(result = result, plot = plot1))
 }
+
+
+

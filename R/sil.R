@@ -60,6 +60,8 @@ sil <- function(distdata, idmedoid, idcluster, title = "") {
   if (length(idcluster) != nrow(distdata))
     stop("The vector of membership must have the same length with the number of objects!")
 
+  rownames(distdata) <- 1:nrow(distdata)
+
   si <- vector("list", nclust)
   for (i in 1:nclust) {
     dista <- distdata[idcluster==i,idcluster==i, drop = FALSE]

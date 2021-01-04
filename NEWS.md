@@ -1,26 +1,32 @@
+# kmed 0.4.0
+
+* Added msv. 
+* Added skm. 
+* Fixed csv. 
+* Fixed inckmed.
+* Fixed rankkmed. 
+* Fixed fastkmed. 
+* Fixed sil. 
+* Deleted silhouette. 
+* Deleted shadow. 
+* Deleted stepkmed. 
+* Edited `NEWS.md`. 
+* Edited vignette. 
+
 # kmed 0.3.0
 
-* Added clust5 data set.
-* Added csv.
-* Added heart data set.
-* Added inckmed.
-* Added sil.
-* Fixed barplotnum.
+* Added clust5.
 * Fixed clustboot.
-* Fixed clustheatmap.
-* Fixed consensusmatrix.
 * Fixed cooccur.
 * Fixed distmix.
-* Fixed distNumeric.
 * Fixed fastkmed.
-* Fixed pcabiplot.
 * Fixed rankkmed.
-* Deprecated shadow.
-* Deprecated silhoutte.
-* Deprecated stepkmed.
+* Fixed shadow.
+* Fixed silhoutte.
+* Fixed stepkmed.
+* Deprecated .
 * Edited `NEWS.md`.
-* More detail vignette.
-* More detail reference manual.
+* Edited vignette.
 
 # kmed 0.2.0
 

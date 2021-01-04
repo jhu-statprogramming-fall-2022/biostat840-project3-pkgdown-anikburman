@@ -43,7 +43,7 @@
 #' @examples
 #' num <- as.matrix(iris[,1:4])
 #' mrwdist <- distNumeric(num, num, method = "mrw")
-#' result <- fastkmed(mrwdist, ncluster = 3, iterate = 50)
+#' result <- rankkmed(mrwdist, ncluster = 3, iterate = 50)
 #' table(result$cluster, iris[,5])
 #'
 #'

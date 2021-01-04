@@ -1,6 +1,6 @@
 #' Simple and fast k-medoid algorithm
 #'
-#' @description This function runs the simple and fast k-meoid algorithm
+#' @description This function runs the simple and fast k-medoid algorithm
 #' proposed by Park and Jun (2009).
 #'
 #' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
@@ -93,6 +93,9 @@ fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
   }
 
   dist_0 <- distdata[,medoid_init, drop = FALSE]
+  for (i in 1:ncluster) {
+    dist_0[names(dist_0[,i]) == colnames(dist_0)[i], i] <- -1
+  }
   member_0 <- apply(dist_0, 1, which.min)
   E0 <- sum(apply(dist_0, 1, min))
 
@@ -107,6 +110,9 @@ fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
   }
 
   dist_1 <- distdata[,medoid_0, drop = FALSE]
+  for (i in 1:ncluster) {
+    dist_1[names(dist_1[,i]) == colnames(dist_1)[i], i] <- -1
+  }
   member_1 <- apply(dist_1, 1, which.min)
   E1 <- sum(apply(dist_1, 1, min))
 
@@ -128,6 +134,9 @@ fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
       medoid_0 <- medoid_1
 
       dist_1 <- distdata[,medoid_0, drop = FALSE]
+      for (i in 1:ncluster) {
+        dist_1[names(dist_1[,i]) == colnames(dist_1)[i], i] <- -1
+      }
       member_1 <- apply(dist_1, 1, which.min)
 
       for (i in 1:ncluster) {
@@ -147,6 +156,9 @@ fastkmed <- function(distdata, ncluster, iterate = 10, init = NULL) {
     index_E <- which.min(E)
     medoid_2 <- medoid[index_E,]
     dist_2 <- distdata[,medoid_2, drop = FALSE]
+    for (i in 1:ncluster) {
+      dist_2[names(dist_2[,i]) == colnames(dist_2)[i], i] <- -1
+    }
     member_2 <- apply(dist_2, 1, which.min)
     E2 <- sum(apply(dist_2, 1, min))
 
