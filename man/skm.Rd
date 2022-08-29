@@ -7,15 +7,15 @@
 skm(distdata, ncluster, seeding = 20, iterate = 10)
 }
 \arguments{
-\item{distdata}{A distance matrix (\emph{n x n}) or \emph{dist} object.}
+\item{distdata}{A distance matrix (n x n) or dist object.}
 
 \item{ncluster}{A number of clusters.}
 
 \item{seeding}{A number of seedings to run the algorithm
-(\emph{see} \strong{Details}).}
+(see \strong{Details}).}
 
 \item{iterate}{A number of iterations for each seeding
-(\emph{see} \strong{Details}).}
+(see \strong{Details}).}
 }
 \value{
 Function returns a list of components:

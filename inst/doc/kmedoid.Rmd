@@ -9,12 +9,13 @@ abstract: |
   cluster analysis. The first part is defining the distance. It has 
   numerical, binary, categorical, and mixed distances. The next 
   part is applying a clustering algorithm in the pre-defined 
-  distance. There are four k-medoids presented, namely the simple 
-  and fast k-medoids, k-medoids, ranked k-medoids, and increasing 
-  number of clusters in k-medoids. After the clustering result is 
-  obtained, a validation step is required. The cluster validation 
-  applies internal and relative criteria. The last part is 
-  visualizing the cluster result in a biplot or marked barplot.
+  distance. There are five k-medoids presented, namely the simple 
+  and fast k-medoids, k-medoids, ranked k-medoids, increasing 
+  number of clusters in k-medoids, and simple k-medoids. 
+  After the clustering result is obtained, a validation step is 
+  required. The cluster validation applies internal and 
+  relative criteria. The last part is visualizing the cluster result 
+  in a biplot or marked barplot.
 references:
 - id: ahmad
   title: A K-mean clustering algorithm for mixed numeric and categorical data
@@ -74,8 +75,6 @@ references:
     given: F. 
   container-title:  Marketing Letters
   volume: 21
-  URL: 'https://doi.org/10.1007/s11002-009-9083-4'
-  DOI: 10.1007/s11002-009-9083-4
   publisher: Springer
   page: 83-101
   type: article-journal
@@ -91,8 +90,6 @@ references:
     given: F. 
   container-title:  International Journal of Market Research 
   volume: 56
-  URL: 'https://doi.org/10.2501/IJMR-2013-073'
-  DOI: 10.2501/IJMR-2013-073
   publisher: Sage
   page: 207-230
   type: article-journal
@@ -106,8 +103,6 @@ references:
     given: J.   
   container-title: Biometrics 
   volume: 27
-  URL: 'https://www.jstor.org/stable/2528823'
-  DOI: 10.2307/2528823
   publisher:  International Biometric Society
   page: 857-871
   type: article-journal
@@ -163,8 +158,6 @@ references:
     given: F.    
   container-title: Statistics and Computing
   volume: 20
-  URL: 'https://doi.org/10.1007/s11222-009-9137-8'
-  DOI: 10.1007/s11222-009-9137-8
   publisher: Springer
   page: 457-469
   type: article-journal
@@ -177,8 +170,6 @@ references:
   - family: Leisch
     given: F.   
   container-title: Handbook of Data Visualization
-  URL: 'https://doi.org/10.1007/978-3-540-33037-0_22'
-  DOI: 10.1007/978-3-540-33037-0_22
   publisher: Springer Verlag
   page: 561-587
   type: chapter
@@ -197,8 +188,6 @@ references:
     given: T. 
   container-title: Machine Learning
   volume: 52
-  URL: 'https://doi.org/10.1023/A:1023949509487'
-  DOI: 10.1023/A:1023949509487
   publisher: Springer
   page: 91-118
   type: article-journal
@@ -230,8 +219,6 @@ references:
     given: J.   
   container-title: Taxon 
   volume: 48
-  URL: 'https://www.jstor.org/stable/1224438'
-  DOI: 10.2307/1224438
   publisher:  Wiley
   page: 331-340
   type: article-journal
@@ -251,8 +238,6 @@ references:
     given: V. J.  
   container-title: Journal of Mathematical Modelling and Algorithms
   volume: 5
-  URL: 'https://www.doi.org/10.1007/s10852-005-9022-1'
-  DOI:  10.1007/s10852-005-9022-1
   publisher:  Springer
   page: 475-504
   type: article-journal
@@ -281,8 +266,6 @@ references:
     given: D.   
   container-title: Exploratory Data Analysis in Empirical Research; Proceedings of the 25th Annual Conference of the Gesellschaft fur Klassifikation e.v., University of Munich, March 14-16, 2001
   volume: 27
-  URL: 'https://doi.org/10.1007/978-3-642-55721-7_23'
-  DOI: 10.1007/978-3-642-55721-7_23
   publisher:  Springer Berlin Heidelberg
   page: 216-226
   type: chapter

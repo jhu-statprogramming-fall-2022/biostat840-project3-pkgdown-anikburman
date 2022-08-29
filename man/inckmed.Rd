@@ -7,14 +7,14 @@
 inckmed(distdata, ncluster, iterate = 10, alpha = 1)
 }
 \arguments{
-\item{distdata}{A distance matrix (\emph{n x n}) or \emph{dist} object.}
+\item{distdata}{A distance matrix (n x n) or dist object.}
 
 \item{ncluster}{A number of clusters.}
 
 \item{iterate}{A number of iterations for the clustering algorithm.}
 
 \item{alpha}{A stretch factor to determine the range of initial medoid
-selection (\emph{see} \strong{Details}).}
+selection (see \strong{Details}).}
 }
 \value{
 Function returns a list of components:
@@ -42,11 +42,11 @@ the user. It is applied to determine a set of medoid candidates. The medoid
 candidates are calculated by
 \eqn{O_c = }\{\eqn{X_i}| \eqn{\sigma_i \leq \alpha \sigma,
 i = 1, 2, \ldots, n} \},
-where \eqn{\sigma_i}  is the average deviation of object \emph{i}, and
+where \eqn{\sigma_i}  is the average deviation of object i, and
 \eqn{\sigma} is the average deviation of the data set. They are computed by
 \deqn{\sigma = \sqrt{\frac{1}{n-1} \sum_{i=1}^n d(O_i, v_1)}}
 \deqn{\sigma_i = \sqrt{\frac{1}{n-1} \sum_{i=1}^n d(O_i, O_j)}}
-where \emph{n} is the number of objects, \eqn{O_i} is the object \emph{i},
+where n is the number of objects, \eqn{O_i} is the object i,
 and \eqn{v_1} is the most centrally located object.
 }
 \examples{

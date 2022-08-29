@@ -3,11 +3,11 @@
 #' @description This function runs the simple and fast k-medoid algorithm
 #' proposed by Park and Jun (2009).
 #'
-#' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
+#' @param distdata A distance matrix (n x n) or dist object.
 #' @param ncluster A number of clusters.
 #' @param iterate A number of iterations for the clustering algorithm.
 #' @param init A vector of initial objects as the cluster medoids
-#' (\emph{see} \strong{Details}).
+#' (see \strong{Details}).
 #'
 #' @details The simple and fast k-medoids, which sets a set of medoids as the
 #' cluster centers, adapts the k-means algorithm for medoid up-dating.
@@ -19,8 +19,8 @@
 #' are selected by
 #' \deqn{ v_j = \sum_{i=1}^n \frac{d_{ij}}{\sum_{l=1}^n d_{il}},
 #' \quad j = 1, 2, 3, \ldots, n }
-#' where the first \emph{k} of the \eqn{v_j} is selected if the number of
-#' clusters is \emph{k}.
+#' where the first k of the \eqn{v_j} is selected if the number of
+#' clusters is k.
 #'
 #' \code{init} can be provided with a vector of id objects. The length of
 #' the vector has to be equal to the number of clusters. However, assigning

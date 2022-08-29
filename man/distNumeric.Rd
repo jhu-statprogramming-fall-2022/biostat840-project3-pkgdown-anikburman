@@ -7,14 +7,14 @@
 distNumeric(x, y, method = "mrw", xyequal = TRUE)
 }
 \arguments{
-\item{x}{A first data matrix (\emph{see} \strong{Details}).}
+\item{x}{A first data matrix (see \strong{Details}).}
 
-\item{y}{A second data matrix (\emph{see} \strong{Details}).}
+\item{y}{A second data matrix (see \strong{Details}).}
 
 \item{method}{A method to calculate the pairwise numerical distance
-(\emph{see} \strong{Details}).}
+(see \strong{Details}).}
 
-\item{xyequal}{A logical if \code{x} is equal to \code{y} (\emph{see}
+\item{xyequal}{A logical if \code{x} is equal to \code{y} (see
 \strong{Details}).}
 }
 \value{
@@ -46,7 +46,7 @@ Their formulas are:
 \deqn{ser.2_{ij} = \sum_{r=1}^{p_n} \frac{(x_{ir} - x_{jr})^2}{ R_r^2 }}
 \deqn{se_{ij} = \sum_{r=1}^{p_n} (x_{ir} - x_{jr})^2}
 where \eqn{p_n} is the number of numerical variables, \eqn{R_r} is the range
-of the \emph{r}-th variables, \eqn{s_r^2} is the variance of the \emph{r}-th
+of the r-th variables, \eqn{s_r^2} is the variance of the r-th
 variables.
 }
 \examples{

@@ -3,25 +3,25 @@
 #' @description This function computes medoid shadow values and shadow value plots of
 #' each cluster. The plot presents the mean of the shadow values as well.
 #'
-#' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
-#' @param idmedoid A vector of id medoids (\emph{see} \strong{Details}).
-#' @param idcluster A vector of cluster membership (\emph{see} \strong{Details}).
+#' @param distdata A distance matrix (n x n) or dist object.
+#' @param idmedoid A vector of id medoids (see \strong{Details}).
+#' @param idcluster A vector of cluster membership (see \strong{Details}).
 #' @param title A title of the plot.
 #'
 #' @details The origin of the shadow value is calculated in the \code{shadow}
 #' function of the \pkg{flexclust} package, in which it is based on the first and
 #' second closest centroid. The \code{msv} function in this package modifies
 #' the centroid into medoid such that the formula to compute shadow value of
-#' object \emph{i} is
+#' object i is
 #' \deqn{msv(i) = \frac{d(i, m'(i))-d(i, m(i))}{d(i, m'(i))}}
-#' where \eqn{d(i, m(i))} is the distance between object \emph{i} to the first
-#' closest medoid and \emph{d(i, m'(i))} is the distance between object
-#' \emph{i} to the second closest medoid.
+#' where \eqn{d(i, m(i))} is the distance between object i to the first
+#' closest medoid and d(i, m'(i)) is the distance between object
+#' i to the second closest medoid.
 #'
 #' The \code{idmedoid} argument corresponds to the \code{idcluster} argument.
 #' If the length of \code{idmedoid} is 3, for example, the \code{idcluster} has
 #' to have 3 unique cluster memberships, or it returns \code{Error} otherwise.
-#' The length of the \code{idcluster} has also to be equal to \emph{n}
+#' The length of the \code{idcluster} has also to be equal to n
 #' (the number of objects). In contrast to the centroid shadow value,
 #' the medoid shadow value is interpreted likewise a silhoutte value,
 #' the higher value the better separation.

@@ -3,12 +3,12 @@
 #' @description This function runs the simple k-medoid algorithm
 #' proposed by Budiaji and Leisch (2019).
 #'
-#' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
+#' @param distdata A distance matrix (n x n) or dist object.
 #' @param ncluster A number of clusters.
 #' @param seeding A number of seedings to run the algorithm
-#' (\emph{see} \strong{Details}).
+#' (see \strong{Details}).
 #' @param iterate A number of iterations for each seeding
-#' (\emph{see} \strong{Details}).
+#' (see \strong{Details}).
 #'
 #' @details The simple k-medoids, which sets a set of medoids as the
 #' cluster centers, adapts the simple and fast k-medoid algoritm.

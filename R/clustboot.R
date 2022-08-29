@@ -3,19 +3,19 @@
 #' @description This function does bootstrap replications for a clustering
 #' algorithm. Any hard clustering algorithm is valid.
 #'
-#' @param distdata A distance matrix (\emph{n x n})/ \emph{dist} object or
+#' @param distdata A distance matrix (n x n)/ dist object or
 #' a data frame.
 #' @param nclust A number of clusters.
-#' @param algorithm A clustering algorithm function (\emph{see} \strong{Details}).
+#' @param algorithm A clustering algorithm function (see \strong{Details}).
 #' @param nboot A number of bootstrap replicates.
 #' @param diss A logical if \code{distdata} is a distance matrix/ object or
 #' a data frame.
 #'
 #' @details This is a function to obtain bootstrap evaluation for cluster results.
 #' The \code{algorithm} argument is a function where this function has two input
-#' arguments. The two input arguments are a \emph{distance matrix/ object} or
-#' a \emph{data frame}, and \emph{number of clusters}. Then the output is only
-#' a \emph{vector of cluster memberships}.
+#' arguments. The two input arguments are a distance matrix/ object or
+#' a data frame, and number of clusters. Then the output is only
+#' a vector of cluster memberships.
 #'
 #' The default \code{algorithm} is \code{fastclust} applying the
 #' \code{\link{fastkmed}} function. The code of the \code{fastclust} is
@@ -28,13 +28,13 @@
 #'
 #' \}
 #'
-#' For other examples, \emph{see} \strong{Examples}. It applies ward and kmeans
+#' For other examples, see \strong{Examples}. It applies ward and kmeans
 #' algorithms. When kmeans is applied, for example, \code{diss} is set to be
 #' \code{FALSE} because the input of the \code{kmclust} and
 #' \code{\link{clustboot}} is a data frame instead of a distance.
 #'
 #' @return Function returns a matrix of bootstrap replicates with a dimension of
-#' \emph{n x b}, where \emph{n} is the number of objects and \emph{b} is the
+#' n x b, where n is the number of objects and b is the
 #' number of bootstrap replicates.
 #'
 #' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}

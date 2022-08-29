@@ -89,7 +89,7 @@
 #' each country from 0 to 100, where 0 is the least favorable towards food
 #' security.
 #'
-#' \url{http://foodsecurityindex.eiu.com}
+#' \url{https://impact.economist.com/sustainability/project/food-security-index/}
 "globalfood"
 
 #' Heart Disease data set

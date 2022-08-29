@@ -4,14 +4,13 @@
 \alias{distmix}
 \title{Distances for mixed variables data set}
 \usage{
-distmix(data, method = "gower", idnum = NULL, idbin = NULL,
-  idcat = NULL)
+distmix(data, method = "gower", idnum = NULL, idbin = NULL, idcat = NULL)
 }
 \arguments{
 \item{data}{A data frame or matrix object.}
 
 \item{method}{A  method to calculate the mixed variables distance
-(\emph{see} \strong{Details}).}
+(see \strong{Details}).}
 
 \item{idnum}{A vector of column index of the numerical variables.}
 
@@ -20,7 +19,7 @@ distmix(data, method = "gower", idnum = NULL, idbin = NULL,
 \item{idcat}{A vector of column index of the categorical variables.}
 }
 \value{
-Function returns a distance matrix (\emph{n x n}).
+Function returns a distance matrix (n x n).
 }
 \description{
 This function computes a distance matrix for a mixed
@@ -37,15 +36,15 @@ The Gower (1971) distance is the most common distance for a mixed variable
 data set. Although the Gower distance accommodates missing values, a missing
 value is not allowed in this function. If there is a missing value, the Gower
 distance from the \code{daisy} function in the \pkg{cluster} package can be
-applied. The Gower distance between objects \emph{i} and \emph{j} is
+applied. The Gower distance between objects i and j is
 computed by
 \eqn{d_{ij} = 1 - s_{ij}}, where
 \deqn{s_{ij} = \frac{\sum_{l=1}^p \omega_{ijl} s_{ijl}}
 {\sum_{l=1}^p \omega_{ijl}}}
-\eqn{\omega_{ijl}} is a weight in variable \emph{l} that is usually 1 or 0
-(for a missing value). If the variable \emph{l} is a numerical variable,
+\eqn{\omega_{ijl}} is a weight in variable l that is usually 1 or 0
+(for a missing value). If the variable l is a numerical variable,
 \deqn{s_{ijl} = 1- \frac{|x_{il} - x_{jl}|}{R_l}}
-\eqn{s_{ijl} \in} \{0, 1\}, if the variable \emph{l} is a binary/
+\eqn{s_{ijl} \in} \{0, 1\}, if the variable l is a binary/
 categorical variable.
 
 \code{wishart}
@@ -55,8 +54,8 @@ the numerical variable part. Instead of a range, it applies a variance of
 the numerical variable in the \eqn{s_{ijl}} such that the distance becomes
 \deqn{d_{ij} = \sqrt{\sum_{l=1}^p \omega_{ijl} \left(\frac{x_{il} - x_{jl}}
 {\delta_{ijl}}\right)^2}}
-where \eqn{\delta_{ijl} = s_l} when \emph{l} is a numerical variable and
-\eqn{\delta_{ijl} \in} \{0, 1\} when \emph{l} is a binary/ categorical
+where \eqn{\delta_{ijl} = s_l} when l is a numerical variable and
+\eqn{\delta_{ijl} \in} \{0, 1\} when l is a binary/ categorical
 variable.
 
 \code{podani}
@@ -65,13 +64,13 @@ Podani (1999) has suggested a different method to compute a distance for
 a mixed variable data set. The Podani distance is calculated by
 \deqn{d_{ij} = \sqrt{\sum_{l=1}^p \omega_{ijl} \left(\frac{x_{il} - x_{jl}}
 {\delta_{ijl}}\right)^2}}
-where \eqn{\delta_{ijl} = R_l} when \emph{l} is a numerical variable and
-\eqn{\delta_{ijl} \in} \{0, 1\} when \emph{l} is a binary/ categorical
+where \eqn{\delta_{ijl} = R_l} when l is a numerical variable and
+\eqn{\delta_{ijl} \in} \{0, 1\} when l is a binary/ categorical
 variable.
 
 \code{huang}
 
-The Huang (1997) distance between objects \emph{i} and \emph{j} is computed
+The Huang (1997) distance between objects i and j is computed
 by
 \deqn{ d_{ij} = \sum_{r=1}^{P_n} (x_{ir} - x_{jr})^2 + \gamma
 \sum_{s=1}^{P_c} \delta_c (x_{is} - x_{js})}
@@ -79,8 +78,8 @@ where \eqn{P_n} and \eqn{P_c} are the number of numerical and categorical
 variables, respectively,
 \deqn{\gamma = \frac{\sum_{r=1}^{P_n} s_{r}^2}{P_n} }
 and \eqn{\delta_c(x_{is} - x_{js})} is the mismatch/ simple matching distance
-(\emph{see} \code{\link{matching}}) between object \emph{i} and object
-\emph{j} in the variable \emph{s}.
+(see \code{\link{matching}}) between object i and object
+j in the variable s.
 
 \code{harikumar}
 
@@ -88,7 +87,7 @@ Harikumar-PV (2015) has proposed a distance for a mixed variable data set:
 \deqn{ d_{ij} = \sum_{r=1}^{P_n} |x_{ir} - x_{jr}| + \sum_{s=1}^{P_c}
 \delta_c (x_{is} - x_{js}) + \sum_{t=1}^{p_b} \delta_b (x_{it}, x_{jt})}
 where \eqn{P_b} is the number of binary variables,
-\eqn{\delta_c (x_{is}, x_{js})} is the co-occurrence distance (\emph{see}
+\eqn{\delta_c (x_{is}, x_{js})} is the co-occurrence distance (see
 \code{\link{cooccur}}), and \eqn{\delta_b (x_{it}, x_{jt})} is the
 Hamming distance.
 
@@ -98,10 +97,11 @@ Ahmad and Dey (2007) has computed a distance of a mixed variable set via
 \deqn{ d_{ij} = \sum_{r=1}^{P_n} (x_{ir} - x_{jr})^2 +
 \sum_{s=1}^{P_c} \delta_c (x_{is} - x_{js})}
 where \eqn{\delta_c (x_{it}, x_{jt})} are the co-occurrence distance
-(\emph{see} \code{\link{cooccur}}). In the Ahmad and Dey distance,
+(see \code{\link{cooccur}}). In the Ahmad and Dey distance,
 the binary and categorical variables are not separable such that
 the co-occurrence distance is based on the combined these two classes,
-i.e. binary and categorical variables.
+i.e. binary and categorical variables. Note that this function applies
+standard version of Squared Euclidean, i.e without any weight.
 
 At leas two arguments of the \code{idnum}, \code{idbin}, and
 \code{idcat} have to be provided because this function calculates

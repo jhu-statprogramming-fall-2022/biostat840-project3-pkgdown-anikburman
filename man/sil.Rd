@@ -7,11 +7,11 @@
 sil(distdata, idmedoid, idcluster, title = "")
 }
 \arguments{
-\item{distdata}{A distance matrix (\emph{n x n}) or \emph{dist} object.}
+\item{distdata}{A distance matrix (n x n) or dist object.}
 
-\item{idmedoid}{A vector of id medoids (\emph{see} \strong{Details}).}
+\item{idmedoid}{A vector of id medoids (see \strong{Details}).}
 
-\item{idcluster}{A vector of cluster membership (\emph{see} \strong{Details}).}
+\item{idcluster}{A vector of cluster membership (see \strong{Details}).}
 
 \item{title}{A title of the plot.}
 }
@@ -28,16 +28,16 @@ each cluster. The plot presents also the mean of the silhouette indices per
 cluster.
 }
 \details{
-The silhouette index of object \emph{i} is calculated by
+The silhouette index of object i is calculated by
 \deqn{si(i)=\frac{b_i-a_i}{max(a_i, b_i)}}
-where \eqn{a_i} is the average distance of object \emph{i} to all objects
-within the cluster, and \eqn{b_i} is the average distance of object \emph{i}
+where \eqn{a_i} is the average distance of object i to all objects
+within the cluster, and \eqn{b_i} is the average distance of object i
 to all objects within the nearest cluster.
 
 The \code{idmedoid} argument corresponds to the \code{idcluster} argument.
 If the length of \code{idmedoid} is 3, for example, the \code{idcluster} has
 to have 3 unique memberships, or it returns \code{Error} otherwise. The
-length of the \code{idcluster} has also to be equal to \emph{n}
+length of the \code{idcluster} has also to be equal to n
 (the number of objects).
 }
 \examples{

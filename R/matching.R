@@ -3,8 +3,8 @@
 #' @description This function computes the simple matching distance from
 #' two data frames/ matrices.
 #'
-#' @param x A first data frame or matrix (\emph{see} \strong{Details}).
-#' @param y A second data frame or matrix (\emph{see} \strong{Details}).
+#' @param x A first data frame or matrix (see \strong{Details}).
+#' @param y A second data frame or matrix (see \strong{Details}).
 #'
 #' @details The \code{x} and \code{y} arguments have to be data frames/
 #' matrices with the same number of columns where the row indicates the object
@@ -14,7 +14,7 @@
 #' matrix, it explicitly calculates all distances in the \code{x} data frame/
 #' matrix.
 #'
-#' The simple matching distance between objects \emph{i} and \emph{j} is
+#' The simple matching distance between objects i and j is
 #' calculated by
 #' \deqn{d_{ij} = \frac{\sum_{s=1}^{P}(x_{is}-x_{js})}{P}}
 #' where  \eqn{P} is the number of variables, and \eqn{ x_{is}-x_{js} \in}

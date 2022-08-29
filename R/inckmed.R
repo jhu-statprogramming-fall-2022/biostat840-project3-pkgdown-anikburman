@@ -3,11 +3,11 @@
 #' @description This function runs the increasing number of  clusters in
 #' the k-medoids algorithm proposed by Yu et. al. (2018).
 #'
-#' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
+#' @param distdata A distance matrix (n x n) or dist object.
 #' @param ncluster A number of clusters.
 #' @param iterate A number of iterations for the clustering algorithm.
 #' @param alpha A stretch factor to determine the range of initial medoid
-#' selection (\emph{see} \strong{Details}).
+#' selection (see \strong{Details}).
 #'
 #' @details This algorithm is claimed to manage with the weakness of the
 #' simple and fast-kmedoids (\code{\link{fastkmed}}). The origin of the
@@ -20,11 +20,11 @@
 #' candidates are calculated by
 #' \eqn{O_c = }\{\eqn{X_i}| \eqn{\sigma_i \leq \alpha \sigma,
 #' i = 1, 2, \ldots, n} \},
-#' where \eqn{\sigma_i}  is the average deviation of object \emph{i}, and
+#' where \eqn{\sigma_i}  is the average deviation of object i, and
 #' \eqn{\sigma} is the average deviation of the data set. They are computed by
 #' \deqn{\sigma = \sqrt{\frac{1}{n-1} \sum_{i=1}^n d(O_i, v_1)}}
 #' \deqn{\sigma_i = \sqrt{\frac{1}{n-1} \sum_{i=1}^n d(O_i, O_j)}}
-#' where \emph{n} is the number of objects, \eqn{O_i} is the object \emph{i},
+#' where n is the number of objects, \eqn{O_i} is the object i,
 #' and \eqn{v_1} is the most centrally located object.
 #'
 #' @return Function returns a list of components:

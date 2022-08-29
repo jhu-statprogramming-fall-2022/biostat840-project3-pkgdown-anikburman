@@ -4,11 +4,11 @@
 #' by Ahmad and Dey (2007).
 #'
 #' @param data A matrix or data frame of binary/ categorical variables
-#' (\emph{see} \strong{Details}).
+#' (see \strong{Details}).
 #'
 #' @details This function computes co-occurrence distance, which is a binary/
 #' categorical distance, that based on the other variable's distribution
-#' (\emph{see} \strong{Examples}).  In the \strong{Examples}, we have a data set:
+#' (see \strong{Examples}).  In the \strong{Examples}, we have a data set:
 #'
 #' \tabular{lrrr}{
 #' object \tab x \tab y \tab z \cr
@@ -23,12 +23,12 @@
 #'
 #' The co-occurrence distance transforms each category of binary/ categorical
 #' in a variable based on the distribution of other variables, for example,
-#' the distance between categories 1 and 2 in the \emph{x} variable can be
-#' different to the distance between categories 1 and 2 in the \emph{z}
+#' the distance between categories 1 and 2 in the x variable can be
+#' different to the distance between categories 1 and 2 in the z
 #' variable. As an example, the transformed distance between categories 1 and 2
-#' in the \emph{z} variable is presented.
+#' in the z variable is presented.
 #'
-#' A cross tabulation between the \emph{z} and \emph{x} variables with
+#' A cross tabulation between the z and x variables with
 #' corresponding (column) proportion is
 #'
 #' \tabular{rrrrrr}{
@@ -37,7 +37,7 @@
 #' 2 \tab 0 \tab 4 \tab ||\tab 0.0 \tab 0.8
 #' }
 #'
-#' A cross tabulation between the \emph{z} and \emph{y} variables with
+#' A cross tabulation between the z and y variables with
 #' corresponding (column) proportion is
 #'
 #' \tabular{rrrrrr}{
@@ -48,16 +48,16 @@
 #'
 #' Then, the maximum values of the proportion in each row are taken such that
 #' they are 1.0, 0.8, 0.6, and 0.5. The new distance between categories 1 and
-#' 2 in the \emph{z} variable is
+#' 2 in the z variable is
 #' \deqn{\delta_{1,2}^z = \frac{(1.0+0.8+0.6+0.5) - 2}{2} = 0.45}
-#' The constant \eqn{2} in the formula applies because the \emph{z} variable
-#' depends on the 2 other variable distributions, i.e the \emph{x} and \emph{y}
+#' The constant \eqn{2} in the formula applies because the z variable
+#' depends on the 2 other variable distributions, i.e the x and y
 #' variables. The new distances of each category in the
-#' for the \emph{x} and \emph{y} variables can be calculated in a similar way.
+#' for the x and y variables can be calculated in a similar way.
 #'
-#' Thus, the distance between objects 1 and 2 is 0.45. It is only the \emph{z}
+#' Thus, the distance between objects 1 and 2 is 0.45. It is only the z
 #' variable counted to calculate the distance between objects 1 and 2
-#' because objects 1 and 2 have similar values in both the \emph{x} and \emph{y}
+#' because objects 1 and 2 have similar values in both the x and y
 #' variables.
 #'
 #' The \code{data} argument can be supplied with either a matrix or data frame,
@@ -67,7 +67,7 @@
 #' is absent due to its dependency to the distribution of other variables
 #' and a \code{warning} message appears.
 #'
-#' @return Function returns a distance matrix (\emph{n x n}).
+#' @return Function returns a distance matrix (n x n).
 #'
 #' @author Weksi Budiaji \cr Contact: \email{budiaji@untirta.ac.id}
 #'

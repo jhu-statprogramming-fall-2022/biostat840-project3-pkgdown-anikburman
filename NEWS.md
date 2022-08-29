@@ -1,9 +1,21 @@
+# kmed 0.4.2
+
+* Edited source URL of global food data.
+* Fixed pcabiplot.
+
+# kmed 0.4.1
+
+* Adjusted to Katex notes.
+* Added note to distmix, ahmad and dey distance.
+* Edited abstract.
+* Edited `NEWS.md`.
+
 # kmed 0.4.0
 
 * Added msv. 
 * Added skm. 
 * Fixed csv. 
-* Fixed inckmed.
+* Fixed inckmed. 
 * Fixed rankkmed. 
 * Fixed fastkmed. 
 * Fixed sil. 

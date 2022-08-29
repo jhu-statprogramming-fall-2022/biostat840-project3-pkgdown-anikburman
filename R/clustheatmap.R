@@ -4,7 +4,7 @@
 #' consensus/ agreement matrix. The values of the consensus/ agreement
 #' matrix are transformed in order to plot the heatmap.
 #'
-#' @param consmat A matrix of consensus/ agreement matrix (\emph{see}
+#' @param consmat A matrix of consensus/ agreement matrix (see
 #' \strong{Details}).
 #' @param title A title of the plot.
 #'
@@ -14,8 +14,8 @@
 #' \code{consmat} argument. The values of the consensus matrix, \strong{A},
 #' are then transformed via a non-linear transformation by applying
 #' \deqn{a_{ij}^{trf} = \frac{a_{ij} - min(a_{..})}{max(a_{..}) - min(a_{..})}}
-#' where \eqn{a_{ij}} is the value of the consensus matrix in row \emph{i} and
-#' column \emph{j}, and \eqn{a_{..}} is the all values of the matrix
+#' where \eqn{a_{ij}} is the value of the consensus matrix in row i and
+#' column j, and \eqn{a_{..}} is the all values of the matrix
 #' (\eqn{\forall}\strong{A}).
 #'
 #' @return Function returns a heatmap plot.

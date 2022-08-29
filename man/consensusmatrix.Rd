@@ -7,22 +7,22 @@
 consensusmatrix(bootdata, nclust, reorder = fastclust)
 }
 \arguments{
-\item{bootdata}{A matrix of bootstrap replicate (\emph{n x b})
-(\emph{see} \strong{Details}).}
+\item{bootdata}{A matrix of bootstrap replicate (n x b)
+(see \strong{Details}).}
 
 \item{nclust}{A number of clusters.}
 
 \item{reorder}{Any distance-based clustering algorithm function
-(\emph{see} \strong{Details}).}
+(see \strong{Details}).}
 }
 \value{
-Function returns a consensus/ agreement matrix of \emph{n x n}
+Function returns a consensus/ agreement matrix of n x n
 dimension.
 }
 \description{
 This function creates a consensus matrix from a matrix of
-bootstrap replicates. It transforms an \emph{n x b} matrix into an
-\emph{n x n} matrix, where \emph{n} is the number of objects and \emph{b}
+bootstrap replicates. It transforms an n x b matrix into an
+n x n matrix, where n is the number of objects and b
 is the number of bootstrap replicates.
 }
 \details{
@@ -31,12 +31,12 @@ bootstrap replicates to evaluate the clustering result. The
 \code{bootdata} argument can be supplied directly from a matrix produced
 by the \code{\link{clustboot}} function. The values of the consensus matrix,
 \strong{A}, are calculated by
-\deqn{a_{ij} = a_{ji} = \frac{\#n \:of \:objects \:\emph{i} \:and \:\emph{j}
-\:in \:the \:same \:cluster}{\#n \:of \:objects \:\emph{i} \:and \:\emph{j}
+\deqn{a_{ij} = a_{ji} = \frac{\#n \:of \:objects \:i \:and \:j
+\:in \:the \:same \:cluster}{\#n \:of \:objects \:i \:and \:j
 \:sampled \:at \:the \:same \:time}}
-where \eqn{a_{ij}} is the agreement index between objects \emph{i} and
-\emph{j}. Note that due to the agreement between objects \emph{i} and
-\emph{j} equal to the agreement between objects \emph{j} and \emph{i},
+where \eqn{a_{ij}} is the agreement index between objects i and
+j. Note that due to the agreement between objects i and
+j equal to the agreement between objects j and i,
 the consensus matrix is a symmetric matrix.
 
 Meanwhile, the \code{reorder} argument is a function to reorder the objects
@@ -44,8 +44,8 @@ in both the row and column of the consensus matrix such that similar objects
 are close to each other. This task can be solved by applying a clustering
 algorithm in the consensus matrix. The \code{reorder} has to consist of
 two input arguments. The two input arguments are a
-\emph{distance matrix/ object} and \emph{number of clusters}.
-The output is only a \emph{vector of cluster memberships}. Thus,
+distance matrix/ object and number of clusters.
+The output is only a vector of cluster memberships. Thus,
 the algorihtm that can be applied in the \code{reorder} argument is the
 distance-based algorithm with a distance as the input.
 
@@ -60,7 +60,7 @@ return(res$cluster)
 
 \}
 
-For other examples, \emph{see} \strong{Examples}. It applies centroid and
+For other examples, see \strong{Examples}. It applies centroid and
 complete linkage algorithms.
 }
 \examples{

@@ -19,7 +19,7 @@
 #' barplot also differs.
 #'
 #' \code{clust} is a vector with the length equal to the number of objects
-#' (\emph{n}), or the function will be an \emph{error} otherwise. \code{nc}
+#' (n), or the function will be an error otherwise. \code{nc}
 #' controls the layout (grid) of the plot. If \code{nc = 1}, the plot of each
 #' cluster is placed in a column. When the number of clusters is 6 and
 #' \code{nc = 2}, for example, the plot has a layout of 3-row and 2-column grids.

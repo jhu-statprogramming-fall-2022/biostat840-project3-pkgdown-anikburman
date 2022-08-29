@@ -7,9 +7,9 @@
 matching(x, y)
 }
 \arguments{
-\item{x}{A first data frame or matrix (\emph{see} \strong{Details}).}
+\item{x}{A first data frame or matrix (see \strong{Details}).}
 
-\item{y}{A second data frame or matrix (\emph{see} \strong{Details}).}
+\item{y}{A second data frame or matrix (see \strong{Details}).}
 }
 \value{
 Function returns a distance matrix with the number of rows equal to
@@ -30,7 +30,7 @@ If the \code{x} data frame/ matrix is equal to the \code{y} data frame/
 matrix, it explicitly calculates all distances in the \code{x} data frame/
 matrix.
 
-The simple matching distance between objects \emph{i} and \emph{j} is
+The simple matching distance between objects i and j is
 calculated by
 \deqn{d_{ij} = \frac{\sum_{s=1}^{P}(x_{is}-x_{js})}{P}}
 where  \eqn{P} is the number of variables, and \eqn{ x_{is}-x_{js} \in}

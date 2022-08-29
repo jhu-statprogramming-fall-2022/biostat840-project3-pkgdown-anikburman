@@ -3,22 +3,22 @@
 #' @description This function runs the rank k-medoids algorithm proposed by
 #' Zadegan et. al. (2013).
 #'
-#' @param distdata A distance matrix (\emph{n x n}) or \emph{dist} object.
+#' @param distdata A distance matrix (n x n) or dist object.
 #' @param ncluster A number of clusters.
-#' @param m A number of objects to compute hostility (\emph{see}
+#' @param m A number of objects to compute hostility (see
 #' \strong{Details}).
 #' @param iterate A number of iterations for the clustering algorithm.
 #' @param init A vector of initial objects as the cluster medoids
-#' (\emph{see} \strong{Details}).
+#' (see \strong{Details}).
 #'
 #' @details This algorithm is claimed to cope with the local optima problem
 #' of the simple and fast-kmedoids algorithm (\code{\link{fastkmed}}). The
 #' \code{m} argument is defined by the user and has to be \eqn{1 < m \leq n}.
 #' The \code{m} is a hostility measure computed by
 #' \deqn{m_i = \sum_{X_j \in Y} r_{ij}}
-#' where \eqn{x_j} is the object \emph{j}, \emph{Y} is the set of objects
-#' as many as \emph{m}, and \eqn{r_{ij}} is the rank distance, i.e. sorted
-#' distance, between object \emph{i} and \emph{j}.
+#' where \eqn{x_j} is the object j, Y is the set of objects
+#' as many as m, and \eqn{r_{ij}} is the rank distance, i.e. sorted
+#' distance, between object i and j.
 #'
 #' \code{init} can be provided with a vector of id objects. The length of
 #' the vector has to be equal to the number of clusters. However, assigning

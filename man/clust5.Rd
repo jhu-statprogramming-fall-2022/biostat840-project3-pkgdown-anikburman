@@ -4,12 +4,14 @@
 \name{clust5}
 \alias{clust5}
 \title{5-clustered data set}
-\format{A data frame with 800 rows and 3 variables:
+\format{
+A data frame with 800 rows and 3 variables:
 \describe{
   \item{x1}{X1.}
   \item{x2}{X2.}
   \item{class}{Class membership.}
-}}
+}
+}
 \source{
 Data is generated via the \code{genRandomClust} function in the
 \pkg{clusterGeneration} package. The code to generate this data

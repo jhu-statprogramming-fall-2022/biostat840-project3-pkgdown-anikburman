@@ -4,7 +4,8 @@
 \name{heart}
 \alias{heart}
 \title{Heart Disease data set}
-\format{A data frame with 297 rows and 14 variables:
+\format{
+A data frame with 297 rows and 14 variables:
 \describe{
   \item{age}{Age in years (numerical).}
   \item{sex}{Sex: 1 = male, 0 = female (logical).}
@@ -28,7 +29,8 @@
   (categorical).}
   \item{class}{Diagonosis of heart disease (4 classes). It can be 2 classes
   by setting 0 for 0 values and 1 for non-0 values.}
-}}
+}
+}
 \source{
 The data set is taken from machine learning repository of UCI.
 The original data set consists of 303 patients with 6 NA's. Then,
