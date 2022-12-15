@@ -1,4 +1,20 @@
 url: ~
 template:
   bootstrap: 5
+  bootswatch: cerulean
+  theme: ayu-mirage
 
+footer:
+  structure:
+    left: [authors, legal]
+    right: pkgdown
+  components:
+    legal: Provided without **any warranty**.
+
+home:
+  sidebar:
+    structure: [authors, custom, toc, dev]
+    components:
+      custom:
+        title: Funding
+        text: We are *grateful* for funding!

@@ -1,0 +1,212 @@
+---
+title: "Kmed: Distance-Based K-Medoids"
+format: html
+editor: visual
+---
+
+## Description
+
+This package uses the distance based k-medoids algorithm in order to carry out clutsering on a set of data points for predefined number of clusters. The package has functions for computing various kind of distances and create a distance matrix followed by k-medoids clustering based on the distance matrix created. It also consists of functions in order to evaluate the validate the qualilty of clustering. 
+
+In this vignette, we will compute the Manhatten Weighted by Range distance (`mrw`) for a data set followed by using the `fastkmed() `function in order to carry out the k-medoid clustering for a pre-defined number of clusters. `fastkmed()` is a simple and fast k-medoid algorithm which was proposed by [Park and Jun (2009)](https://www.sciencedirect.com/science/article/abs/pii/S095741740800081X). The only input required for this function is the distance matrix along with the number of clusters we want to partition our data set into.
+
+## Data Analysis
+
+### Data description
+
+The data we have used here is the `salary_potential.csv` data set from [TidyTuesday](https://www.tidytuesday.com/). The data provides information about Estimated early career pay (in USD) and Estimated mid career pay (in USD) for alumni from different schools in various states of the US along with some other information as well. We can get a brief description of the data set along with the link to download the data set [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-03-10#salary_potentialcsv).
+
+### Aim of the Analysis
+
+The variables in the data set `salary_potential.csv` that we are interested in are:
+
+* early_career_pay
+* mid_career_pay
+* make_world_better_percent	
+
+Using these three variables, we want to see how the pay varies from one state to another for both early career and mid career. We also want to exlpore how the amount of pay is related to the variable `make_world_better_place`, which essentially tells us what proportion of alumni from a particular school feels they are doing good to the society in return of the salary they ar getting by receiving education from their respective schools.
+
+### Main Analysis
+
+Let us have a glimpse of the data that we will be working with:
+
+```{r, warning=FALSE,message=FALSE}
+library(kmed)
+library(ggrepel)
+library(here)
+library(tidyverse)
+
+if(!file.exists(here("data","salary_potential.RDS"))){
+  salary_potential <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/salary_potential.csv')
+
+  system("mkdir -p ./data")
+  
+  saveRDS(salary_potential, file = here("data","salary_potential.RDS"))
+}
+
+salary_potential = readRDS(here("data","salary_potential.RDS"))
+
+head(salary_potential)
+```
+
+
+We will do a state-wise analysis. We will consider all the schools that is located in a state together as a single unit by taking mean of the estimated pays and make world percentages. Let us compute the state-wise means for all the variables of interest.
+
+```{r,message=FALSE,warning=FALSE}
+state_wise = salary_potential %>%
+  group_by(state_name) %>%
+  summarise(early_pay = mean(early_career_pay),
+            mid_pay = mean(mid_career_pay),
+            better_world = mean(make_world_better_percent,
+                                na.rm = TRUE))
+```
+
+Now on this data set which is the mean of the variables for each state, we will apply k-medoids alogrithm for clustering. We will use `mrw` distance and `fastkmed` function for k-medoids as mentioned in the description section.
+
+For `fastkmed` method, apart from the distance matrix, we also need to pre-specify the number of clusters into which we want to cluster our data points into. Here we have chosen the number of clusters to be 3. The intuition behinds doing this was, we wanted to partition the data points into three clusters where one will consist of the states having high estimated pay, one will consist of states having medium estimated pay and the last that will consist of states having low estimated pay. Let us now run the functions and look at the clustering results. We have considered all the three variables mentioned in the **Aim of Analysis** section for clustering.
+
+```{r,message=FALSE,warning=FALSE}
+num = as.matrix(state_wise[,-c(1)])
+rownames(num) = state_wise$state_name
+sedist = distNumeric(num, num, method = "mrw")
+sedist[1:3,1:3]
+
+sfkm = fastkmed(sedist, ncluster = 3, iterate = 50)
+
+num = data.frame(num) %>%
+  mutate(clusters = as.factor(sfkm$cluster),
+         names = state_wise$state_name)
+
+set.seed(1)
+s = sample(1:length(num$names),40,replace = FALSE)
+nn = num$names
+nn[s] = ""
+ggplot(data = num,
+       aes(x = early_pay,y = mid_pay,
+           color = clusters,
+           label = names)) +
+  geom_point() +
+  geom_text(size = 3, aes(
+    label=nn),
+    hjust=1,
+    vjust=-1) +
+  xlim(35000,70000) +
+  theme(text = element_text(size = 10)) +
+  labs(title = "Results from K-medoid Clustering",
+       subtitle = "Along with early and middle pay, betterment of World percentage taken in account for clustering",
+       x = "Early Pay",
+       y = "Middle Pay",
+       caption = "Anik Burman (PhD 1st year, Biostatistics, Bloomberg School of Public Health)")
+```
+
+
+We have plotted the clustering results for the pay variables. It looks that the choice of number clusters was good, because we can see a clear partition of the pay coordinates in three regions. So let us describe eaach cluster now:
+
+* Cluster 1: High pay cluster (states having high estimated early and middle pay)
+* Cluster 2: High pay cluster (states having medium estimated early and middle pay)
+* Cluster 3: High pay cluster (states having low estimated early and middle pay)
+
+Let us now see how is the distribution of the early and middle pay for the states in each cluster:
+
+```{r,message=FALSE,warning=FALSE}
+new = num[,-5]
+new$clusters = as.numeric(new$clusters)
+
+str_dat = new |> split(new$clusters)
+
+mean = str_dat |> map_dfr(.f = ~colMeans(.x))
+
+sd = str_dat |> map_dfc(.f = function(.x) apply(.x, 2, sd))
+sd = as.tibble(t(sd)) %>%  select(-V4) %>%  mutate(clusters = 1:3)
+
+sd = rename(sd,
+            sd_early_pay = V1,
+            sd_mid_pay = V2,
+            sd_better_world = V3)
+
+plot_data = left_join(mean,sd,by = c("clusters" = "clusters"))
+
+plot_data = plot_data %>%
+  select(-c(better_world,sd_better_world)) %>%
+  relocate(clusters, .before = early_pay)
+
+long <- plot_data %>%
+  pivot_longer(
+    cols = `early_pay`:`sd_mid_pay`,
+    names_to = "names",
+    values_to = "values"
+  )
+
+plot_data = cbind(long[c(1:2,5:6,9:10),c(1,3)],long[-c(1:2,5:6,9:10),c(3)])
+colnames(plot_data)[2:3] = c("mean","sd")
+plot_data = as_tibble(plot_data) %>%
+            mutate(type = rep(c("early","mid"),3))
+
+
+
+ggplot(plot_data, aes(x = as.factor(clusters), y = mean, colour = type, group = type)) +
+geom_errorbar(aes(ymin = mean-sd, ymax = mean + sd)) +
+geom_point(color = "black", size = 1.5) +
+labs(title = "Interval Estimate of Pays for the Three Clusters",
+       subtitle = "A clear pattern in early and mid pay is visible",
+       y = "Pay",
+       x = "Clusters",
+     caption = "Anik Burman (PhD 1st year, Biostatistics, Bloomberg School of Public Health)")
+```
+
+We see a similar kind of distribution for early and mid pay for states in the three clusters. 
+
+Next we will see how is the distribution of make world better percentage variable for each cluster.
+
+```{r,message=FALSE,warning=FALSE,fig.height=10}
+ggplot(num, aes(x=better_world)) +
+  geom_histogram(bins = 7,aes(y=..density..), colour="black", fill="white")+
+  facet_grid(clusters~.)+
+  geom_density(alpha=.2, fill="blue") +
+  labs(title = "Histogram of 'Making World Better' Percentage for each Cluster",
+       subtitle = "With increasing potential income feeling decreases",
+       y = "density",
+       x = "% of alumni who think they are making the world a better place",
+       caption = "Anik Burman (PhD 1st year, Biostatistics, Bloomberg School of Public Health)")
+
+```
+
+From the above figure, we have found something interesting. We see that the mode of the distribution shifts to the right when we move from cluster 1 to clsuter 3. This means that with decreasing estimated early and middle pay, alumni have an increasing feeling that they are making World a better place to live. It seems as if the amount of salary earned is inversely related to the feeling that they are helping the World.
+
+### Summary
+
+At the end, we can say that there is a clear classification of states into three distinct cluster of pays. Also we have found a very interesting association between the amount of pay and the 'making World a better place' feeling.
+
+### Functions used
+
+`purrr`
+
+* map_dfr()
+* map_dfc()
+
+`dplyr`, `tidyr`, `lubridate`, `stringr`, or `forcats`
+
+* select()
+* mutate()
+* left_join()
+* as.tibble()
+* split()
+* group_by()
+* summarise()
+* relocate()
+* pivot_longer()
+
+`ggplot2`
+
+* geom_histogram()
+* geom_errorbar()
+* geom_point()
+* geom_density()
+* facet_grid()
+* geom_text()
+
+`kmed`
+
+* distNumeric() 
+* fastkmed() 
+
